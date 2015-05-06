@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rl_layout">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:orientation="vertical">
+
+
+        <!-- version name -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffff7103">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Version Name"
+                        android:id="@+id/tv_version"
+                        android:textSize="20sp"
+                        android:paddingLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <EditText
+                        android:id="@+id/et_Version"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="4"
+                        android:singleLine="true"
+                        android:textSize="20sp"
+                        android:textColor="#ffffff"
+                        android:layout_toRightOf="@+id/tv_version"
+                        android:layout_toEndOf="@+id/tv_version" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        <!-- end version -->
+
+
+
+        <!-- engine -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ff429fff">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/engine"
+                            android:id="@+id/tv_Engine"
+                            android:paddingTop="2dp"
+                            android:paddingLeft="10dp"
+                            android:textSize="25sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/torgue"
+                            android:textSize="18sp"
+                            android:paddingLeft="12dp"
+                            android:nestedScrollingEnabled="true"
+                            android:id="@+id/textView14" />
+
+                        <EditText
+                            android:id="@+id/et_torque_nm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffffff"
+                            android:ems="4"
+                            android:singleLine="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/nm_at"
+                            android:id="@+id/tv_torque_nm_at"
+                            android:textSize="18sp"
+                            android:layout_alignBaseline="@+id/et_torque_nm"
+                            android:layout_alignBottom="@+id/et_torque_nm"
+                            android:layout_toLeftOf="@+id/tv_torque_rpm"
+                            android:layout_toStartOf="@+id/tv_torque_rpm"
+                            android:layout_marginRight="28dp"
+                            android:layout_marginEnd="28dp" />
+
+                        <EditText
+                            android:id="@+id/et_torque_rpm"
+                            android:layout_width="53dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffffff"
+                            android:ems="4"
+                            android:singleLine="true"
+                            android:layout_alignBottom="@+id/tv_torque_nm_at"
+                            android:layout_toRightOf="@+id/textView14" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/rpm"
+                            android:id="@+id/tv_torque_rpm"
+                            android:inputType="number"
+                            android:textSize="18sp"
+                            android:paddingLeft="12dp"
+                            android:nestedScrollingEnabled="true"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_alignTop="@+id/tv_torque_nm_at"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/hp"
+                            android:id="@+id/tv_hp"
+                            android:textSize="18sp"
+                            android:paddingLeft="12dp"
+                            android:nestedScrollingEnabled="true" />
+
+                        <EditText
+                            android:id="@+id/et_hp"
+                            android:layout_width="68dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffffff"
+                            android:ems="4"
+                            android:singleLine="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/hp_at"
+                            android:textSize="18sp"
+                            android:paddingLeft="12dp"
+                            android:nestedScrollingEnabled="true" />
+
+                        <EditText
+                            android:id="@+id/et_hp_rpm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffffff"
+                            android:ems="4"
+                            android:singleLine="true"
+
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/rpm"
+                            android:textSize="18sp"
+                            android:paddingLeft="12dp"
+                            android:nestedScrollingEnabled="true" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        <!-- end engine -->
+
+        <!-- front wheel -->
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ff17ffa4">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/front_wheel"
+                        android:paddingTop="2dp"
+                        android:paddingLeft="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/rim_size"
+                        android:textSize="20sp"
+                        android:paddingLeft="12dp" />
+
+                    <EditText
+                        android:id="@+id/et_front_rim_size"
+                        android:layout_width="139dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textColor="#ffffff"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/tires_size"
+                        android:textSize="20sp"
+                        android:paddingLeft="12dp"
+
+                        android:id="@+id/textView15" />
+
+                    <EditText
+                        android:id="@+id/et_front_tires_size"
+                        android:layout_width="125dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textColor="#ffffff"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:layout_alignParentTop="true" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+<!-- end front wheel -->
+
+<!-- rear wheel -->
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ff00ff6a">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/rear_wheel"
+
+                        android:paddingTop="2dp"
+                        android:paddingLeft="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/rim_size"
+                        android:textSize="20sp"
+                        android:paddingLeft="12dp"
+                        android:inputType="number"
+                        android:id="@+id/textView16" />
+
+                    <EditText
+                        android:id="@+id/et_rear_rim_size"
+                        android:layout_width="128dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/tires_size"
+                        android:textSize="20sp"
+                        android:paddingLeft="12dp"
+                        android:id="@+id/textView17" />
+
+                    <EditText
+                        android:id="@+id/et_rear_tires_size"
+                        android:layout_width="89dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        <!-- end tire -->
+
+
+        <!-- body -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ff6dc2ff">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/body_axle"
+                        android:paddingTop="2dp"
+                        android:paddingLeft="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/driveline_layout"
+                        android:id="@+id/textView18"
+                        android:textSize="20sp"
+                        android:paddingLeft="12dp" />
+
+                    <EditText
+                        android:id="@+id/et_driveline_layout"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/weight_on_front_tires"
+                        android:textSize="20sp"
+                        android:paddingLeft="12dp"
+                        android:id="@+id/textView19" />
+
+                    <EditText
+                        android:id="@+id/et_weight_front_percent"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:textSize="20sp"
+                        android:singleLine="true"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/weight_on_rear_tires"
+                        android:textSize="20sp"
+                        android:paddingLeft="12dp"
+                        android:id="@+id/tv_weight_rear" />
+
+                    <TextView
+                        android:id="@+id/tv_weight_rear_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+                <!-- height -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/height_of_cg"
+                        android:textSize="20sp"
+                        android:paddingLeft="12dp" />
+
+                    <EditText
+                        android:id="@+id/et_height"
+                        android:inputType="number"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:singleLine="true"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/weight"
+                        android:id="@+id/textView37"
+                        android:textSize="20sp"
+                        android:paddingLeft="12dp" />
+
+                    <EditText
+                        android:id="@+id/et_weight_all"
+                        android:inputType="number"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:singleLine="true"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/wheel_base"
+                        android:id="@+id/textView35"
+                        android:textSize="20sp"
+                        android:paddingLeft="12dp" />
+
+                    <EditText
+                        android:id="@+id/et_wheelbase"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:textSize="20sp"
+                        android:singleLine="true"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ff00ff6a" >
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/others"
+                            android:paddingTop="2dp"
+                            android:paddingLeft="10dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/traction_control"
+                            android:id="@+id/tv_traction_control"
+                            android:textSize="20sp"
+                            android:paddingLeft="12dp" />
+
+                        <EditText
+                            android:id="@+id/et_traction_control"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:singleLine="true"
+                            android:textColor="#ffffff" />
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+                <!-- end wheel base -->
+
+
+
+
+            </LinearLayout>
+
+
+        <!-- end body -->
+
+
+
+    </LinearLayout>
+
+    </ScrollView>
+
+
+
+</RelativeLayout>
