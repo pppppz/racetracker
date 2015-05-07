@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,32 +46,52 @@ import java.util.List;
 // myOnMapLongClickListener = set mark and get location
 
 
-public class Fragment_Map extends Fragment {
+public class Fragment_Map_for_gen extends Fragment {
 
-    private GoogleMap myMap;
     Polyline line;
     Context context;
-    private TextView tvLocation;
-    private Button btn_draw;
-
     LatLng point;
-
     // Static LatLng
     LatLng startLatLng = new LatLng(13.756037, 100.532185);
-    //LatLng startLatLng = new LatLng(30.707104, 76.690749);
-
     LatLng endLatLng = new LatLng(30.721419, 76.730017);
+    private GoogleMap myMap;
+    private TextView tvLocation;
+    //LatLng startLatLng = new LatLng(30.707104, 76.690749);
+    //when long clicked will mark into the map and set textfield
+    GoogleMap.OnMapLongClickListener myOnMapLongClickListener =
+            new GoogleMap.OnMapLongClickListener() {
 
+                @Override
+                public void onMapLongClick(LatLng p) {
 
+                    //create mark point and set text
+                    myMap.addMarker(new MarkerOptions().position(p).title(p.toString()));
+                    tvLocation.setText(p.toString());
+                    point = p; // set point use for draw
+                }
+            };
+    private Button btn_draw;
     private View view;
     private FragmentActivity faActivity;
+    Button.OnClickListener btn_draw_listener = new Button.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            draw(point);
+        }
+    };
+
+    //convert location to string for set into textfield
+    public static String locationStringFromLocation(final Location location) {
+        return Location.convert(location.getLatitude(), Location.FORMAT_DEGREES) + " " + Location.convert(location.getLongitude(), Location.FORMAT_DEGREES);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         faActivity = super.getActivity();
-        view = (View) inflater.inflate(R.layout.fragment_map, container, false);
+        view = inflater.inflate(R.layout.fragment_chooselocationstartorfinish, container, false);
 
         tvLocation = (TextView) view.findViewById(R.id.textview_SetLocation);
         btn_draw = (Button) view.findViewById(R.id.btn_draw);
@@ -81,7 +100,7 @@ public class Fragment_Map extends Fragment {
 //         myMap = ((SupportMapFragment) faActivity.getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
         myMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
-       Log.e("fragment map " , "1");
+        Log.e("fragment map ", "1");
         myMap.setMyLocationEnabled(true);
         Log.e("fragment map ", "2");
         myMap.setOnMapLongClickListener(myOnMapLongClickListener);
@@ -117,72 +136,12 @@ public class Fragment_Map extends Fragment {
         }
     }
 
-
-    Button.OnClickListener btn_draw_listener = new Button.OnClickListener(){
-
-        @Override
-        public void onClick(View v) {
-            draw(point);
-        }
-    };
-
-
-    //when long clicked will mark into the map and set textfield
-    GoogleMap.OnMapLongClickListener myOnMapLongClickListener =
-            new GoogleMap.OnMapLongClickListener() {
-
-                @Override
-                public void onMapLongClick(LatLng p) {
-
-                    //create mark point and set text
-                    myMap.addMarker(new MarkerOptions().position(p).title(p.toString()));
-                    tvLocation.setText(p.toString());
-                    point = p; // set point use for draw
-                }
-            };
-
-
     public void click_btn(View v) {
 
         //    Log.e("Test code", "method onclick");
 
         draw(point);
 
-    }
-
-    private class connectAsyncTask extends AsyncTask<Void, Void, String> {
-        private ProgressDialog progressDialog;
-        String url;
-
-        connectAsyncTask(String urlPass) {
-            url = urlPass;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Fetching route, Please wait...");
-            progressDialog.setIndeterminate(true);
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            JSONParser jParser = new JSONParser();
-            String json = jParser.getJSONFromUrl(url);
-            return json;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            progressDialog.hide();
-            if (result != null) {
-                drawPath(result);
-            }
-        }
     }
 
     public String makeURL(double sourcelat, double sourcelog, double destlat,
@@ -199,54 +158,6 @@ public class Fragment_Map extends Fragment {
         urlString.append(Double.toString(destlog));
         urlString.append("&sensor=false&mode=driving&alternatives=true");
         return urlString.toString();
-    }
-
-    public class JSONParser {
-
-        InputStream is = null;
-        JSONObject jObj = null;
-        String json = "";
-
-        // constructor
-        public JSONParser() {
-        }
-
-        public String getJSONFromUrl(String url) {
-
-            // Making HTTP request
-            try {
-                // defaultHttpClient
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost(url);
-
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                HttpEntity httpEntity = httpResponse.getEntity();
-                is = httpEntity.getContent();
-
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(is, "iso-8859-1"), 8);
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-
-                json = sb.toString();
-                is.close();
-            } catch (Exception e) {
-                Log.e("Buffer Error", "Error converting result " + e.toString());
-            }
-            return json;
-
-        }
     }
 
     public void drawPath(String result) {
@@ -315,8 +226,86 @@ public class Fragment_Map extends Fragment {
         return poly;
     }
 
-    //convert location to string for set into textfield
-    public static String locationStringFromLocation(final Location location) {
-        return Location.convert(location.getLatitude(), Location.FORMAT_DEGREES) + " " + Location.convert(location.getLongitude(), Location.FORMAT_DEGREES);
+    private class connectAsyncTask extends AsyncTask<Void, Void, String> {
+        String url;
+        private ProgressDialog progressDialog;
+
+        connectAsyncTask(String urlPass) {
+            url = urlPass;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Fetching route, Please wait...");
+            progressDialog.setIndeterminate(true);
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            JSONParser jParser = new JSONParser();
+            String json = jParser.getJSONFromUrl(url);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progressDialog.hide();
+            if (result != null) {
+                drawPath(result);
+            }
+        }
+    }
+
+    public class JSONParser {
+
+        InputStream is = null;
+        JSONObject jObj = null;
+        String json = "";
+
+        // constructor
+        public JSONParser() {
+        }
+
+        public String getJSONFromUrl(String url) {
+
+            // Making HTTP request
+            try {
+                // defaultHttpClient
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost(url);
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+                is = httpEntity.getContent();
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(is, "iso-8859-1"), 8);
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+
+                json = sb.toString();
+                is.close();
+            } catch (Exception e) {
+                Log.e("Buffer Error", "Error converting result " + e.toString());
+            }
+            return json;
+
+        }
     }
 }

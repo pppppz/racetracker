@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -47,6 +46,7 @@ public class MainActivity extends ActionBarActivity {
     private ArrayList<NavDrawerItem> navDrawerItems;
     private NavDrawerListAdapter adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,14 +55,12 @@ public class MainActivity extends ActionBarActivity {
         // get user data and check log in
         parse();
         drawAllUI(savedInstanceState);
-
     }
 
     private void drawAllUI(Bundle savedInstanceState){
 
         // load slide menu items
-        mTitle = mDrawerTitle = getTitle(); ////////////////////////////////// ????????????????????????
-
+        mTitle = mDrawerTitle = getTitle();
         drawDrawer(); // drawer is a list of menu when swipe
         enableHomeButtonOnActionBar();
         forceUse_softMenu();
@@ -98,7 +96,8 @@ public class MainActivity extends ActionBarActivity {
         // enabling action bar app icon and behaving it as toggle button
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        //    getSupportActionBar().setNavigationMode(bigActionBar.NAVIGATION_MODE_STANDARD);
+
 
     }
 
@@ -187,17 +186,6 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    /**
-     * Slide menu item click listener
-     */
-    private class SlideMenuClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            // display view for selected nav drawer item
-            displayView(position);
-        }
-    }
-
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if nav drawer is opened, hide the action items
@@ -211,16 +199,16 @@ public class MainActivity extends ActionBarActivity {
      */
     private void displayView(int position) {
         // update the main content by replacing fragments
-        Fragment fragment = null;
+        Fragment fragment;
         switch (position) {
             case 0:
-                fragment = new Fragment_Home();
+                fragment = new Fragment_CreateRecord();
                 break;
             case 1:
                 fragment = new Fragment_CarInfo();
                 break;
             case 2:
-                fragment = new Fragment_Test();
+                fragment = new Fragment_Home();
                 break;
             case 3:
                 fragment = new Fragment_Profile();
@@ -229,15 +217,13 @@ public class MainActivity extends ActionBarActivity {
                 fragment = new Fragment_Speed();
                 break;
             case 5:
-                fragment = new Fragment_Map();
+                fragment = new Fragment_ChooseLocationStartOrFinish();
                 break;
-
             default:
-                fragment = new Fragment_Home();
+                fragment = new Fragment_CreateRecord();
                 break;
         }
 
-        if (fragment != null) {
             //create fragment manager for manage to switching fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame_container , fragment).commit();
@@ -246,12 +232,8 @@ public class MainActivity extends ActionBarActivity {
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
             setTitle(navMenuTitles[position]);
-            mDrawerLayout.closeDrawer(mDrawerList);
+        mDrawerLayout.closeDrawer(mDrawerList);
 
-        } else {
-            // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
-        }
     }
 
     @Override
@@ -293,7 +275,6 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
 
-
         switch (item.getItemId()) {
             case R.id.action_logout:
                 ParseUser.logOut();
@@ -303,6 +284,17 @@ public class MainActivity extends ActionBarActivity {
                 return true;
         }
         return false;
+    }
+
+    /**
+     * Slide menu item click listener
+     */
+    private class SlideMenuClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            // display view for selected nav drawer item
+            displayView(position);
+        }
     }
 
 }

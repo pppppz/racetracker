@@ -22,7 +22,7 @@ import com.app.raceanalyzer.parse.Car;
 import com.parse.ParseACL;
 import com.parse.ParseUser;
 
-public class Fragment_ADD_CAR extends Fragment {
+public class Fragment_Add_Car extends Fragment {
 
     private TextView tvLocation;
 
@@ -164,10 +164,7 @@ public class Fragment_ADD_CAR extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            //  mURL = savedInstanceState.getString("currentURL", "");
-            //Log.e("frag home", mURL);
-        }
+
     }
 
     @Override

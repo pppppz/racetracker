@@ -2,26 +2,13 @@ package com.app.raceanalyzer;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
-import android.location.GpsSatellite;
-import android.location.GpsStatus;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-
-import com.google.android.gms.location.LocationListener;
-
-import java.util.Iterator;
 
 public class Fragment_Pattern extends Fragment{
 
@@ -54,10 +41,7 @@ public class Fragment_Pattern extends Fragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            //  mURL = savedInstanceState.getString("currentURL", "");
-            //Log.e("frag home", mURL);
-        }
+
     }
 
     @Override
@@ -69,7 +53,7 @@ public class Fragment_Pattern extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_record_lap, container, false);
         return view;
 
     }

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,21 +22,21 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Iterator;
 
-public class Fragment_Home extends Fragment {
+public class Fragment_Record_Lap extends Fragment {
 
     protected LocationManager locationManager;
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
     MyLocationListener myLocationListener;
-    private TextView tvLocation;
-    private TextView tvSpeed;
-    private TextView tvSatellite_inview, tvSatellite_inuse;
+    private TextView tvSatellite_inview, tvSatellite_inuse, tvSpeed, tv_LocationStart, tvLocation;
     private View view;
     private Activity a;
-    private Button startButton;
+    private Button startButton, btnSet_start_finish_point;
     private TextView timerValue;
     private long startTime = 0L;
     private Handler customHandler = new Handler();
@@ -76,17 +77,28 @@ public class Fragment_Home extends Fragment {
             if (gpsStatus != null) {
                 Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
                 Iterator<GpsSatellite> sat = satellites.iterator();
+                int i = 0;
+              /*  while (sat.hasNext()) {
+                    GpsSatellite satellite = sat.next();
+                    strGpsStats += (i++) + ": " + satellite.getPrn() + "," + satellite.usedInFix() + "," + satellite.getSnr() + "," + satellite.getAzimuth() + "," + satellite.getElevation() + "\n\n";
+                }
+
+                // Toast.makeText(getBaseContext(), strGpsStats, Toast.LENGTH_LONG).show();
+                Log.i("T", "GPS STATUS HAS CHANGED:" + strGpsStats);
+           //     tvSatellite.setText("GPS satellites: " + strGpsStats);
+                tvSatellite.setText(strGpsStats);
+                */
                 int iTempCountInView = 0;
                 int iTempCountInUse = 0;
 
-                //    if (satellites != null) {
-                for (GpsSatellite gpsSatellite : satellites) {
-                    iTempCountInView++;
-                    if (gpsSatellite.usedInFix()) {
-                        iTempCountInUse++;
+                if (satellites != null) {
+                    for (GpsSatellite gpsSatellite : satellites) {
+                        iTempCountInView++;
+                        if (gpsSatellite.usedInFix()) {
+                            iTempCountInUse++;
+                        }
                     }
                 }
-                //    }
                 tvSatellite_inview.setText("In view : " + iTempCountInView);
                 tvSatellite_inuse.setText("In use : " + iTempCountInUse);
 
@@ -97,6 +109,8 @@ public class Fragment_Home extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -113,6 +127,20 @@ public class Fragment_Home extends Fragment {
                     timeSwapBuff += timeInMilliseconds;
                     customHandler.removeCallbacks(updateTimerThread);
                 }
+            }
+        });
+
+        btnSet_start_finish_point.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+
+                Fragment fragment = new Fragment_ChooseLocationStartOrFinish();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+
+
             }
         });
 
@@ -148,6 +176,11 @@ public class Fragment_Home extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            //  mURL = savedInstanceState.getString("currentURL", "");
+            //Log.e("frag home", mURL);
+        }
+
 
     }
 
@@ -166,6 +199,20 @@ public class Fragment_Home extends Fragment {
         tvSpeed = (TextView) view.findViewById(R.id.tv_Speed);
         tvSatellite_inview = (TextView) view.findViewById(R.id.tv_satellite_in_view);
         tvSatellite_inuse = (TextView) view.findViewById(R.id.tv_satellite_in_use);
+        btnSet_start_finish_point = (Button) view.findViewById(R.id.btn_set_start_finish_point);
+        tv_LocationStart = (TextView) view.findViewById(R.id.tv_LocationStart);
+        tvLocation = (TextView) view.findViewById(R.id.tv_Location);
+
+        savedInstanceState = getArguments();
+        if (savedInstanceState != null) {
+            // then you have arguments
+            LatLng location = getArguments().getParcelable("location");
+            tv_LocationStart.setText(location.toString());
+        } else {
+            // no arguments supplied...
+            tv_LocationStart.setText("not set location start/finish");
+        }
+
 
         return view;
 
@@ -175,20 +222,7 @@ public class Fragment_Home extends Fragment {
 
         @Override
         public void onLocationChanged(Location location) {
-/*
-            // Initialize the location fields
 
-            latitude.setText("Latitude: "+String.valueOf(location.getLatitude()));
-
-            longitude.setText("Longitude: "+String.valueOf(location.getLongitude()));
-
-            provText.setText(provider + " provider has been selected.");
-
-
-            Toast.makeText(MainActivity.this,  "Location changed!",
-
-                    Toast.LENGTH_SHORT).show();
-*/
             location.getLatitude();
             latitude = (float) location.getLatitude();
             longitude = (float) location.getLongitude();
@@ -199,7 +233,10 @@ public class Fragment_Home extends Fragment {
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
 
-            Toast.makeText(getActivity(), provider + "'s status changed to " + status + "!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), provider + "'s status changed to " + status + "!",
+
+                    Toast.LENGTH_SHORT).show();
+
             Log.e("test", provider + "'s status changed to " + status + "!");
 
         }

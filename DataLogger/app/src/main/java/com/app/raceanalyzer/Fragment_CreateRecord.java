@@ -10,39 +10,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
-public class Fragment_CarInfo extends Fragment{
+public class Fragment_CreateRecord extends Fragment {
 
-    private TextView tvLocation;
-
+    Button btnCreateRecord;
     private View view;
-    private Activity a;
-    private Button btnAddCar;
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
-
-
     @Override
     public void onResume() {
         super.onResume();
-        // put your code here...
 
+        btnCreateRecord.setOnClickListener(new View.OnClickListener() {
 
-
-
+            public void onClick(View view) {
+                Fragment fragment = new Fragment_Record_Lap();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+            }
+        });
 
 
     }
-
-
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -54,36 +47,15 @@ public class Fragment_CarInfo extends Fragment{
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //  outState.putString("currentURL", mURL);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_carinfo, container, false);
-
-
-
-        btnAddCar = (Button) view.findViewById(R.id.btn_Add_New_Car);
-
-
-        btnAddCar.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-
-                Fragment fragment = new Fragment_Add_Car();
-
-                //create fragment manager for manage to switching fragment
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.frame_container , fragment).commit();
-            }
-        });
-
+        view = inflater.inflate(R.layout.fragment_create_record, container, false);
+        btnCreateRecord = (Button) view.findViewById(R.id.btn_create_record);
         return view;
 
     }
-
 
 }
