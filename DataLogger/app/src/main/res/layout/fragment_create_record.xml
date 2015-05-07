@@ -4,19 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:orientation="vertical">
-
-
-        <Button
-            android:id="@+id/btn_create_record"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/start_record" />
-    </LinearLayout>
+        android:text="Choose Start Point"
+        android:id="@+id/btnChooseStartPoint" />
 
 </LinearLayout>

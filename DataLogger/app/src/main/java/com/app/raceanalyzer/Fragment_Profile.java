@@ -1,15 +1,12 @@
 package com.app.raceanalyzer;
 
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,18 +42,8 @@ public class Fragment_Profile extends Fragment {
     public String retrieveName()  {
 
         ParseUser user = ParseUser.getCurrentUser();
-        String title = user.getUsername();
-        return title;
+        return user.getUsername();
     }
 
-    private OnClickListener onClickImage = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            String url = "https://github.com/OmniDebt/OmniDebt-Android";
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
-            startActivity(i);
-        }
-    };
 
 }

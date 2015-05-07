@@ -1,19 +1,15 @@
 package com.app.raceanalyzer;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,19 +20,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.Iterator;
-
-public class Fragment_Record_Lap extends Fragment {
+public class Fragment_StartRecordLap extends Fragment {
 
     protected LocationManager locationManager;
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
-    MyLocationListener myLocationListener;
-    private TextView tvSatellite_inview, tvSatellite_inuse, tvSpeed, tv_LocationStart, tvLocation;
+    private MyLocationListener myLocationListener;
+    private TextView tvSatellite_inview, tvSatellite_inuse, tvSpeed;
     private View view;
-    private Activity a;
-    private Button startButton, btnSet_start_finish_point;
+    private Button startButton;
     private TextView timerValue;
     private long startTime = 0L;
     private Handler customHandler = new Handler();
@@ -44,6 +37,7 @@ public class Fragment_Record_Lap extends Fragment {
     private float longitude;
     private Criteria criteria;
     private String provider;
+    private Location location;
     private Runnable updateTimerThread = new Runnable() {
 
         public void run() {
@@ -65,29 +59,16 @@ public class Fragment_Record_Lap extends Fragment {
     };
     private GpsStatus.Listener mGpsStatusListener = new GpsStatus.Listener() {
 
-
-        private int mNumSatellites = -1;
-
         public void onGpsStatusChanged(int event) {
 
 
-            String strGpsStats = "";
+            // String strGpsStats = "";
 
             GpsStatus gpsStatus = locationManager.getGpsStatus(null);
             if (gpsStatus != null) {
                 Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
-                Iterator<GpsSatellite> sat = satellites.iterator();
-                int i = 0;
-              /*  while (sat.hasNext()) {
-                    GpsSatellite satellite = sat.next();
-                    strGpsStats += (i++) + ": " + satellite.getPrn() + "," + satellite.usedInFix() + "," + satellite.getSnr() + "," + satellite.getAzimuth() + "," + satellite.getElevation() + "\n\n";
-                }
+                //  Iterator<GpsSatellite> sat = satellites.iterator();
 
-                // Toast.makeText(getBaseContext(), strGpsStats, Toast.LENGTH_LONG).show();
-                Log.i("T", "GPS STATUS HAS CHANGED:" + strGpsStats);
-           //     tvSatellite.setText("GPS satellites: " + strGpsStats);
-                tvSatellite.setText(strGpsStats);
-                */
                 int iTempCountInView = 0;
                 int iTempCountInUse = 0;
 
@@ -107,13 +88,6 @@ public class Fragment_Record_Lap extends Fragment {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
@@ -130,20 +104,6 @@ public class Fragment_Record_Lap extends Fragment {
             }
         });
 
-        btnSet_start_finish_point.setOnClickListener(new View.OnClickListener() {
-
-
-            @Override
-            public void onClick(View v) {
-
-                Fragment fragment = new Fragment_ChooseLocationStartOrFinish();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-
-
-            }
-        });
-
         // Get the location manager
         locationManager = (LocationManager) super.getActivity().getSystemService(Context.LOCATION_SERVICE);
         // Define the criteria how to select the location provider
@@ -154,34 +114,13 @@ public class Fragment_Record_Lap extends Fragment {
         provider = locationManager.getBestProvider(criteria, false);
 
         // the last known location of this provider
-        Location location = locationManager.getLastKnownLocation(provider);
+        //location = locationManager.getLastKnownLocation(provider);
 
         locationManager.addGpsStatusListener(mGpsStatusListener);
         myLocationListener = new MyLocationListener();
 
-        /*
-        if (location != null) {
-            myLocationListener.onLocationChanged(location);
-        } else {
-            // leads to the settings because there is no last known location
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
-        }*/
-
         // location updates: at least 1 meter and 200millsecs change
         locationManager.requestLocationUpdates(provider, 200, 1, myLocationListener);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            //  mURL = savedInstanceState.getString("currentURL", "");
-            //Log.e("frag home", mURL);
-        }
-
-
     }
 
     @Override
@@ -199,21 +138,16 @@ public class Fragment_Record_Lap extends Fragment {
         tvSpeed = (TextView) view.findViewById(R.id.tv_Speed);
         tvSatellite_inview = (TextView) view.findViewById(R.id.tv_satellite_in_view);
         tvSatellite_inuse = (TextView) view.findViewById(R.id.tv_satellite_in_use);
-        btnSet_start_finish_point = (Button) view.findViewById(R.id.btn_set_start_finish_point);
-        tv_LocationStart = (TextView) view.findViewById(R.id.tv_LocationStart);
-        tvLocation = (TextView) view.findViewById(R.id.tv_Location);
 
         savedInstanceState = getArguments();
         if (savedInstanceState != null) {
             // then you have arguments
             LatLng location = getArguments().getParcelable("location");
-            tv_LocationStart.setText(location.toString());
+            Log.e("location start ", location.toString());
         } else {
             // no arguments supplied...
-            tv_LocationStart.setText("not set location start/finish");
+            Log.e("location start", " not set");
         }
-
-
         return view;
 
     }
@@ -226,7 +160,7 @@ public class Fragment_Record_Lap extends Fragment {
             location.getLatitude();
             latitude = (float) location.getLatitude();
             longitude = (float) location.getLongitude();
-            tvLocation.setText("latitude : " + latitude + " Longitude : " + longitude);
+            Log.e("location now : ", "latitude : " + latitude + " Longitude : " + longitude);
             tvSpeed.setText("Current speed:" + location.getSpeed());
         }
 
@@ -245,7 +179,6 @@ public class Fragment_Record_Lap extends Fragment {
         public void onProviderEnabled(String provider) {
 
             Toast.makeText(getActivity(), "Provider " + provider + " enabled!",
-
                     Toast.LENGTH_SHORT).show();
 
         }
@@ -256,9 +189,6 @@ public class Fragment_Record_Lap extends Fragment {
             Toast.makeText(getActivity(), "Provider " + provider + " disabled!",
 
                     Toast.LENGTH_SHORT).show();
-
         }
     }
-
-
 }

@@ -217,7 +217,7 @@ public class MainActivity extends ActionBarActivity {
                 fragment = new Fragment_Speed();
                 break;
             case 5:
-                fragment = new Fragment_ChooseLocationStartOrFinish();
+                fragment = new Fragment_ChooseStartPoint();
                 break;
             default:
                 fragment = new Fragment_CreateRecord();

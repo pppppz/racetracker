@@ -1,4 +1,4 @@
-package com.app.raceanalyzer;
+package com.app.raceanalyzer.knowledge;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.raceanalyzer.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -27,7 +28,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -37,7 +37,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +90,7 @@ public class Fragment_Map_for_gen extends Fragment {
                              Bundle savedInstanceState) {
 
         faActivity = super.getActivity();
-        view = inflater.inflate(R.layout.fragment_chooselocationstartorfinish, container, false);
+        view = inflater.inflate(R.layout.fragment_choose_start_point, container, false);
 
         tvLocation = (TextView) view.findViewById(R.id.textview_SetLocation);
         btn_draw = (Button) view.findViewById(R.id.btn_draw);
@@ -144,21 +143,6 @@ public class Fragment_Map_for_gen extends Fragment {
 
     }
 
-    public String makeURL(double sourcelat, double sourcelog, double destlat,
-                          double destlog) {
-        StringBuilder urlString = new StringBuilder();
-        urlString.append("http://maps.googleapis.com/maps/api/directions/json");
-        urlString.append("?origin=");// from
-        urlString.append(Double.toString(sourcelat));
-        urlString.append(",");
-        urlString.append(Double.toString(sourcelog));
-        urlString.append("&destination=");// to
-        urlString.append(Double.toString(destlat));
-        urlString.append(",");
-        urlString.append(Double.toString(destlog));
-        urlString.append("&sensor=false&mode=driving&alternatives=true");
-        return urlString.toString();
-    }
 
     public void drawPath(String result) {
         if (line != null) {
@@ -194,7 +178,7 @@ public class Fragment_Map_for_gen extends Fragment {
 
     private List<LatLng> decodePoly(String encoded) {
 
-        List<LatLng> poly = new ArrayList<LatLng>();
+        List<LatLng> poly = new ArrayList<>();
         int index = 0, len = encoded.length();
         int lat = 0, lng = 0;
 
@@ -247,8 +231,8 @@ public class Fragment_Map_for_gen extends Fragment {
         @Override
         protected String doInBackground(Void... params) {
             JSONParser jParser = new JSONParser();
-            String json = jParser.getJSONFromUrl(url);
-            return json;
+
+            return jParser.getJSONFromUrl(url);
         }
 
         @Override
@@ -283,10 +267,6 @@ public class Fragment_Map_for_gen extends Fragment {
                 HttpEntity httpEntity = httpResponse.getEntity();
                 is = httpEntity.getContent();
 
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -294,7 +274,7 @@ public class Fragment_Map_for_gen extends Fragment {
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(is, "iso-8859-1"), 8);
                 StringBuilder sb = new StringBuilder();
-                String line = null;
+                String line;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line + "\n");
                 }

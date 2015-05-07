@@ -271,105 +271,17 @@
             </LinearLayout>
 
 
-            <!-- start button -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#BBDEFB"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:paddingTop="2dp"
-                        android:text="Location Start/Finish"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tv_LocationStart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:paddingLeft="30dp"
-                        android:text="Null"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textSize="15sp" />
-
-                </RelativeLayout>
-            </LinearLayout>
-
-
-            <!-- start button -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#BBDEFB"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:paddingTop="2dp"
-                        android:text="Location Now"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tv_Location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:paddingLeft="30dp"
-                        android:text="Null"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textSize="15sp" />
-
-                </RelativeLayout>
-            </LinearLayout>
-
 
             <Button
                 android:id="@+id/startButton"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="fill_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_horizontal"
                 android:background="@color/highlighted_text_material_light"
                 android:text="@string/startButtonLabel" />
 
-            <Button
-                android:id="@+id/btn_set_start_finish_point"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/common_signin_btn_default_background"
-                android:text="@string/set_start_finish_point" />
 
             <!-- end start button -->
 

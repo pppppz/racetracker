@@ -1,4 +1,4 @@
-package com.app.raceanalyzer;
+package com.app.raceanalyzer.knowledge;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.app.raceanalyzer.R;
 
 public class Fragment_Pattern extends Fragment{
 
