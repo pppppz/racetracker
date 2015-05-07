@@ -175,20 +175,6 @@ public class Fragment_Home extends Fragment {
 
         @Override
         public void onLocationChanged(Location location) {
-/*
-            // Initialize the location fields
-
-            latitude.setText("Latitude: "+String.valueOf(location.getLatitude()));
-
-            longitude.setText("Longitude: "+String.valueOf(location.getLongitude()));
-
-            provText.setText(provider + " provider has been selected.");
-
-
-            Toast.makeText(MainActivity.this,  "Location changed!",
-
-                    Toast.LENGTH_SHORT).show();
-*/
             location.getLatitude();
             latitude = (float) location.getLatitude();
             longitude = (float) location.getLongitude();

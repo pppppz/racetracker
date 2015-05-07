@@ -79,7 +79,6 @@ public class Fragment_ChooseStartPoint extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putParcelable("location", location);
             //set Fragmentclass Arguments
-
             Fragment fragment = new Fragment_StartRecordLap();
             fragment.setArguments(bundle);
             getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).commit();

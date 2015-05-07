@@ -278,7 +278,6 @@ public class Fragment_Map_for_gen extends Fragment {
                 while ((line = reader.readLine()) != null) {
                     sb.append(line + "\n");
                 }
-
                 json = sb.toString();
                 is.close();
             } catch (Exception e) {

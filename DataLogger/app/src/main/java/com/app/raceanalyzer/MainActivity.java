@@ -226,7 +226,7 @@ public class MainActivity extends ActionBarActivity {
 
             //create fragment manager for manage to switching fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame_container , fragment).commit();
+        new switchFragment(fragment, fragmentManager).doSwitch();
 
             // update selected item and title, then close the drawer
             mDrawerList.setItemChecked(position, true);

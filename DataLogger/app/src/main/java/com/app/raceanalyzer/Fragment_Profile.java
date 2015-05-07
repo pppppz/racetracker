@@ -37,8 +37,6 @@ public class Fragment_Profile extends Fragment {
         return llLayout;
     }
 
-
-
     public String retrieveName()  {
 
         ParseUser user = ParseUser.getCurrentUser();
