@@ -1,6 +1,10 @@
 package com.app.raceanalyzer;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Criteria;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
@@ -18,44 +22,74 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.raceanalyzer.Database.createLapHeaderDB;
+import com.app.raceanalyzer.Database.createLapLocationChangeDB;
+import com.app.raceanalyzer.Database.createRecordDB;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.ParseUser;
 
 public class Fragment_StartRecordLap extends Fragment {
 
+    //location
     protected LocationManager locationManager;
+    //time
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
+    long bestLapTime = 0L;
+    long startTime = 0L;
+    LatLng StartLocation;
+    //connect DB
+    private createLapLocationChangeDB lapDB;
+    private createRecordDB recordDB;
+    private createLapHeaderDB lapHeaderDB;
+    private Handler customHandler = new Handler();
+    //parse
+    private ParseUser parseUSER;
     private MyLocationListener myLocationListener;
-    private TextView tvSatellite_inview, tvSatellite_inuse, tvSpeed;
+    private TextView tvSatellite_InView, tvSatellite_InUse, tvSpeed;
     private View view;
     private Button startButton;
     private TextView timerValue;
-    private long startTime = 0L;
-    private Handler customHandler = new Handler();
-    private float latitude;
-    private float longitude;
+    private SensorManager sensorMgr;
+    private float latitude, longitude;
+
+
+    //GPS
     private Criteria criteria;
     private String provider;
-    private Location location;
+    private float bestLapSpeed;
+
+    //axis
+    private double axis_x, axis_y, axis_z, velocity;
+    SensorEventListener AccelerometerSensorEventListener = new SensorEventListener() {
+
+        @Override
+        public void onAccuracyChanged(Sensor arg0, int arg1) {
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            axis_x = event.values[0];
+            axis_y = event.values[1];
+            axis_z = event.values[2];
+        }
+    };
+    private long round_id;
     private Runnable updateTimerThread = new Runnable() {
-
         public void run() {
-
             timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
-
             updatedTime = timeSwapBuff + timeInMilliseconds;
-
-            int secs = (int) (updatedTime / 1000);
-            int mins = secs / 60;
-            secs = secs % 60;
+            int sec = (int) (updatedTime / 1000);
+            int min = sec / 60;
+            sec = sec % 60;
             int milliseconds = (int) (updatedTime % 1000);
-            timerValue.setText("" + mins + ":"
-                    + String.format("%02d", secs) + ":"
+
+            timerValue.setText("" + min + ":"
+                    + String.format("%02d", sec) + ":"
                     + String.format("%03d", milliseconds));
             customHandler.postDelayed(this, 0);
         }
-
     };
     private GpsStatus.Listener mGpsStatusListener = new GpsStatus.Listener() {
 
@@ -63,25 +97,24 @@ public class Fragment_StartRecordLap extends Fragment {
 
 
             // String strGpsStats = "";
-
             GpsStatus gpsStatus = locationManager.getGpsStatus(null);
             if (gpsStatus != null) {
                 Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
                 //  Iterator<GpsSatellite> sat = satellites.iterator();
 
-                int iTempCountInView = 0;
-                int iTempCountInUse = 0;
+                int CountInView = 0;
+                int CountInUse = 0;
 
                 if (satellites != null) {
                     for (GpsSatellite gpsSatellite : satellites) {
-                        iTempCountInView++;
+                        CountInView++;
                         if (gpsSatellite.usedInFix()) {
-                            iTempCountInUse++;
+                            CountInUse++;
                         }
                     }
                 }
-                tvSatellite_inview.setText("In view : " + iTempCountInView);
-                tvSatellite_inuse.setText("In use : " + iTempCountInUse);
+                tvSatellite_InView.setText("In view : " + CountInView);
+                tvSatellite_InUse.setText("In use : " + CountInUse);
 
             }
         }
@@ -106,62 +139,116 @@ public class Fragment_StartRecordLap extends Fragment {
 
         // Get the location manager
         locationManager = (LocationManager) super.getActivity().getSystemService(Context.LOCATION_SERVICE);
+
         // Define the criteria how to select the location provider
         criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
         criteria.setCostAllowed(false);
+
         // get the best provider depending on the criteria
         provider = locationManager.getBestProvider(criteria, false);
 
         // the last known location of this provider
         //location = locationManager.getLastKnownLocation(provider);
 
-        locationManager.addGpsStatusListener(mGpsStatusListener);
         myLocationListener = new MyLocationListener();
+        locationManager.addGpsStatusListener(mGpsStatusListener);
 
         // location updates: at least 1 meter and 200millsecs change
         locationManager.requestLocationUpdates(provider, 200, 1, myLocationListener);
+
+        //accelerometer
+        sensorMgr = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        Sensor sensor = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorMgr.registerListener(AccelerometerSensorEventListener, sensor, SensorManager.SENSOR_DELAY_UI);
+
+        Log.e(Fragment_StartRecordLap.class.getName(), String.valueOf(round_id));
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //  outState.putString("currentURL", mURL);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        /** declare xml to java*/
         view = inflater.inflate(R.layout.fragment_record_lap, container, false);
         timerValue = (TextView) view.findViewById(R.id.timerValue);
         startButton = (Button) view.findViewById(R.id.startButton);
         tvSpeed = (TextView) view.findViewById(R.id.tv_Speed);
-        tvSatellite_inview = (TextView) view.findViewById(R.id.tv_satellite_in_view);
-        tvSatellite_inuse = (TextView) view.findViewById(R.id.tv_satellite_in_use);
+        tvSatellite_InView = (TextView) view.findViewById(R.id.tv_satellite_in_view);
+        tvSatellite_InUse = (TextView) view.findViewById(R.id.tv_satellite_in_use);
 
+        /** get location & round id from fragment_chooseStartPoint */
         savedInstanceState = getArguments();
         if (savedInstanceState != null) {
             // then you have arguments
-            LatLng location = getArguments().getParcelable("location");
-            Log.e("location start ", location.toString());
+            StartLocation = getArguments().getParcelable("location");
+            round_id = getArguments().getLong("round_id");
+
+            Log.e("location start ", StartLocation.toString() + "Round id : " + round_id);
         } else {
             // no arguments supplied...
-            Log.e("location start", " not set");
+            Log.e("location & round", " not set");
         }
+        //record to createRecordDB
+        lapDB = new createLapLocationChangeDB(getActivity());
         return view;
+    }
+
+    protected void addDataToSQLite(double axis_x, double axis_y, double axis_z, double velocity, long round_id, double lat, double lng) {
+        parseUSER = ParseUser.getCurrentUser();
+        lapDB.addNewLocationChange(parseUSER.getUsername(), axis_x, axis_y, axis_z, velocity, round_id, lat, lng);
 
     }
 
     private class MyLocationListener implements android.location.LocationListener {
 
+        /**
+         * if location listener .. accelerometer add data into sqlite
+         */
+
         @Override
         public void onLocationChanged(Location location) {
 
+            //get location
             location.getLatitude();
             latitude = (float) location.getLatitude();
             longitude = (float) location.getLongitude();
+
+            //speed
+            velocity = location.getSpeed();
+
+            if (latitude == StartLocation.latitude && longitude == StartLocation.longitude) {
+
+                if (updatedTime < bestLapTime) {
+                    //set best lap
+                    CharSequence time = timerValue.getText();
+                    Log.e("best lap ", (String) time);
+
+                    //update record
+                    recordDB.updateRecord(parseUSER.getUsername(), bestLapTime, round_id);
+                }
+
+                //clear last lap
+                updatedTime = 0L;
+
+                //start new lap
+                lapDB = new createLapLocationChangeDB(getActivity());
+
+            }
+
+            if (bestLapSpeed > location.getSpeed()) {
+                bestLapSpeed = location.getSpeed();
+            }
+
             Log.e("location now : ", "latitude : " + latitude + " Longitude : " + longitude);
-            tvSpeed.setText("Current speed:" + location.getSpeed());
+            tvSpeed.setText("Current speed:" + velocity);
+            addDataToSQLite(axis_x, axis_y, axis_z, velocity, round_id, latitude, longitude);
+
         }
 
         @Override
@@ -185,9 +272,7 @@ public class Fragment_StartRecordLap extends Fragment {
 
         @Override
         public void onProviderDisabled(String provider) {
-
             Toast.makeText(getActivity(), "Provider " + provider + " disabled!",
-
                     Toast.LENGTH_SHORT).show();
         }
     }

@@ -10,9 +10,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 public class Fragment_CreateRecord extends Fragment {
 
+    Activity activity;
+    /**
+     * button to switch to fragment choose map
+     */
+    Button.OnClickListener chooseStartPointListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            new switchFragment(new Fragment_ChooseStartPoint(), fragmentManager).doSwitch();
+        }
+    };
     private Button btnChooseStartPoint;
     private View view;
-    Activity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -23,14 +34,5 @@ public class Fragment_CreateRecord extends Fragment {
         btnChooseStartPoint.setOnClickListener(chooseStartPointListener);
         return view;
     }
-
-    Button.OnClickListener chooseStartPointListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            new switchFragment(new Fragment_ChooseStartPoint(), fragmentManager).doSwitch();
-        }
-    };
 
 }

@@ -3,7 +3,6 @@ package com.app.raceanalyzer;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +18,11 @@ public class Fragment_Profile extends Fragment {
 
     private TextView tv_Name;
     private RelativeLayout llLayout;
-    private FragmentActivity faActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
 
-        faActivity  = super.getActivity();
         llLayout    = (RelativeLayout) inflater.inflate(R.layout.fragment_profile, container, false);
         tv_Name = (TextView) llLayout.findViewById(R.id.tv_name);
 

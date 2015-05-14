@@ -55,6 +55,7 @@ public class MainActivity extends ActionBarActivity {
         // get user data and check log in
         parse();
         drawAllUI(savedInstanceState);
+
     }
 
     private void drawAllUI(Bundle savedInstanceState){
@@ -96,7 +97,7 @@ public class MainActivity extends ActionBarActivity {
         // enabling action bar app icon and behaving it as toggle button
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //    getSupportActionBar().setNavigationMode(bigActionBar.NAVIGATION_MODE_STANDARD);
+        //getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
 
     }
@@ -150,10 +151,8 @@ public class MainActivity extends ActionBarActivity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, "22"));
         // Profile
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
-        // Speed
+        // DB (Test)
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-        // Map
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(4, -1)));
 
         // Recycle the typed array
         navMenuIcons.recycle();
@@ -208,16 +207,10 @@ public class MainActivity extends ActionBarActivity {
                 fragment = new Fragment_CarInfo();
                 break;
             case 2:
-                fragment = new Fragment_Home();
-                break;
-            case 3:
                 fragment = new Fragment_Profile();
                 break;
-            case 4:
-                fragment = new Fragment_Speed();
-                break;
-            case 5:
-                fragment = new Fragment_ChooseStartPoint();
+            case 3:
+                fragment = new Fragment_Add_Car();
                 break;
             default:
                 fragment = new Fragment_CreateRecord();
