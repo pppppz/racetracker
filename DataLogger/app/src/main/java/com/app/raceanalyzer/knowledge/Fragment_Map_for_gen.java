@@ -92,8 +92,8 @@ public class Fragment_Map_for_gen extends Fragment {
         faActivity = super.getActivity();
         view = inflater.inflate(R.layout.fragment_choose_start_point, container, false);
 
-        tvLocation = (TextView) view.findViewById(R.id.textview_SetLocation);
-        btn_draw = (Button) view.findViewById(R.id.btn_draw);
+        //  tvLocation = (TextView) view.findViewById(R.id.textview_SetLocation);
+        //  btn_draw = (Button) view.findViewById(R.id.btn_draw);
 
 
 //         myMap = ((SupportMapFragment) faActivity.getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
