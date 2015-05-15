@@ -12,11 +12,9 @@
     
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
-        <item>Home (Created Record)</item>
-        <item >Car INFO</item>
+        <item>Home</item>
+        <item>Car Information</item>
         <item >Record</item>
-        <item >Profile</item>
-        <item> DB (Test)</item>
     </string-array>
     
     <!-- Nav Drawer List Item Icons -->

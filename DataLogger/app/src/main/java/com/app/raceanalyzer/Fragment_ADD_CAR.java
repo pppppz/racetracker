@@ -22,7 +22,7 @@ import com.app.raceanalyzer.parse.Car;
 import com.parse.ParseACL;
 import com.parse.ParseUser;
 
-public class Fragment_Add_Car extends Fragment {
+public class Fragment_ADD_CAR extends Fragment {
 
     private TextView tvLocation;
 
@@ -154,7 +154,6 @@ public class Fragment_Add_Car extends Fragment {
         switch (item.getItemId()) {
             case R.id.save_car:
                 saveCar();
-
                 return true;
         }
         return false;
@@ -170,7 +169,6 @@ public class Fragment_Add_Car extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //  outState.putString("currentURL", mURL);
     }
 
 

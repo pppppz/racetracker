@@ -49,15 +49,13 @@ public class Fragment_Pattern extends Fragment{
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //  outState.putString("currentURL", mURL);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_record_lap, container, false);
+        view = inflater.inflate(R.layout.fragment_example, container, false);
         return view;
-
     }
 
 }

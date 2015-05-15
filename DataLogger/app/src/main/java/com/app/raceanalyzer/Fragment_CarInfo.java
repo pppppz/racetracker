@@ -73,7 +73,7 @@ public class Fragment_CarInfo extends Fragment{
             public void onClick(View v)
             {
 
-                Fragment fragment = new Fragment_Add_Car();
+                Fragment fragment = new Fragment_ADD_CAR();
 
                 //create fragment manager for manage to switching fragment
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

@@ -19,11 +19,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
 
-
 public class Fragment_ChooseStartPoint extends Fragment {
 
     //UI
-    private TextView tvLocation;
+    private TextView tvLatitude, tvLongitude;
     private Button btnSaveLocationToRecord;
     private View view;
 
@@ -31,8 +30,6 @@ public class Fragment_ChooseStartPoint extends Fragment {
     private ParseUser parseUSER;
     private GoogleMap myMap;
     private Marker marker;
-    private createRecordDB recordDB;
-    private LatLng location = new LatLng(13.756037, 100.532185); //set start location (now set at digitopolis)
     /**
      * create marker point and set text
      */
@@ -43,14 +40,13 @@ public class Fragment_ChooseStartPoint extends Fragment {
             if (marker != null) {
                 myMap.clear();
             }
-
             //set latitude , longitude to text field
-            String latitude = String.valueOf(location.latitude);
-            String longitude = String.valueOf(location.longitude);
-            tvLocation.setText("Latitude : " + latitude + " Longitude : " + longitude);
+
             return false;
         }
     };
+    private createRecordDB recordDB;
+    private LatLng location = new LatLng(13.756037, 100.532185); //set start location (now set at digitopolis)
     /**
      * when press long clicked in map for marker into the map and set location to text field
      */
@@ -63,8 +59,10 @@ public class Fragment_ChooseStartPoint extends Fragment {
 
                     //add new marker , set text to display to screen , set location
                     marker = myMap.addMarker(new MarkerOptions().position(point).title(point.toString()));
-                    tvLocation.setText(point.toString());
-                    location = point;
+
+                    //set latitude , longitude to text field
+                    setLocationToTextView(point);
+
                 }
             };
     private long round_id;
@@ -98,7 +96,8 @@ public class Fragment_ChooseStartPoint extends Fragment {
                              Bundle savedInstanceState) {
         /** set UI */
         view = inflater.inflate(R.layout.fragment_choose_start_point, container, false);
-        tvLocation = (TextView) view.findViewById(R.id.tvSetLocation);
+        tvLatitude = (TextView) view.findViewById(R.id.tvLatitude);
+        tvLongitude = (TextView) view.findViewById(R.id.tvLongitude);
         btnSaveLocationToRecord = (Button) view.findViewById(R.id.btnSaveLocationToRecord);
         btnSaveLocationToRecord.setOnClickListener(btnSaveLocationToRecordListener);
 
@@ -108,6 +107,15 @@ public class Fragment_ChooseStartPoint extends Fragment {
         /** create Record Activity */
         recordDB = new createRecordDB(getActivity());
         return view;
+    }
+
+    private void setLocationToTextView(LatLng location) {
+
+        this.location = location;
+        String latitude = String.valueOf(location.latitude);
+        String longitude = String.valueOf(location.longitude);
+        tvLatitude.setText("Latitude : " + latitude);
+        tvLongitude.setText("Longitude : " + longitude);
     }
 
     private void setMap() {

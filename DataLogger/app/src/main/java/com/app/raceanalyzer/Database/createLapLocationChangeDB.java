@@ -17,6 +17,7 @@ public class createLapLocationChangeDB {
     private String ROUND_ID = "round_id";
     private String Lat = "latitude";
     private String Lng = "longitude";
+    private String LAP_ID = "lap_id";
 
     public createLapLocationChangeDB(Context context) {
         dbHelper = new DatabaseHelper(context);
@@ -24,7 +25,7 @@ public class createLapLocationChangeDB {
     }
 
     public long addNewLocationChange(String _user_id, double axis_x, double axis_y, double axis_z,
-                                     double velocity, long round_id, double lat, double lng) {
+                                     double velocity, long round_id, double lat, double lng, long lap_id) {
         ContentValues values = new ContentValues();
         values.put(USER_ID, _user_id);
         values.put(AXIS_X, axis_x);
@@ -34,6 +35,7 @@ public class createLapLocationChangeDB {
         values.put(ROUND_ID, round_id);
         values.put(Lat, lat);
         values.put(Lng, lng);
+        values.put(LAP_ID, lap_id);
         return database.insert(DB_NAME_LapLocationChange, null, values);
     }
 }
