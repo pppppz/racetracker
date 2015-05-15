@@ -22,7 +22,7 @@ import com.app.raceanalyzer.parse.Car;
 import com.parse.ParseACL;
 import com.parse.ParseUser;
 
-public class Fragment_ADD_CAR extends Fragment {
+public class Fragment_AddCar extends Fragment {
 
     private TextView tvLocation;
 
