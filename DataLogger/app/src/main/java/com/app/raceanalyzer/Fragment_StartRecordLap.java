@@ -24,13 +24,14 @@ import com.app.raceanalyzer.SensorListener.AccelerometerListener;
 import com.app.raceanalyzer.SensorListener.GPS_Listener;
 import com.app.raceanalyzer.SensorListener.LocationListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.parse.ParseUser;
 
 public class Fragment_StartRecordLap extends Fragment {
 
     public static TextView tvSatellite_InView, tvSatellite_InUse, tvSpeed;
     public static double latitude;
     public static double longitude;
+
+
     //accelorometer
     public static double axis_x, axis_y, axis_z, velocity;
     //location
@@ -42,13 +43,14 @@ public class Fragment_StartRecordLap extends Fragment {
     long bestLapTime = 0L;
     long startTime = 0L;
     LatLng StartLocation;
+    private Handler customHandler = new Handler();
+
     //connect DB
     private createLapLocationChangeDB lapDB;
     private createRecordDB recordDB;
     private createLapHeaderDB lapHeaderDB;
-    private Handler customHandler = new Handler();
+
     //parse
-    private ParseUser parseUSER;
     private LocationListener locationListener;
     private View view;
     private Button startButton;
@@ -59,8 +61,6 @@ public class Fragment_StartRecordLap extends Fragment {
     private String provider;
     private Location location;
     private long round_id;
-    //get
-    private long lapID, temp_lapID;
 
 
     private Runnable updateTimerThread = new Runnable() {
@@ -96,29 +96,8 @@ public class Fragment_StartRecordLap extends Fragment {
             }
         });
 
-
-        // Define the criteria how to select the location provider
-        criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setCostAllowed(false);
-
-        // get the best provider depending on the criteria
-        locationManager = (LocationManager) super.getActivity().getSystemService(Context.LOCATION_SERVICE);
-        provider = locationManager.getBestProvider(criteria, false);
-
-        location = locationManager.getLastKnownLocation(provider);  // the last known location of this provider
-        locationListener = new LocationListener();
-        GPS_Listener gpsListener = new GPS_Listener(locationManager);
-        locationManager.addGpsStatusListener(gpsListener);
-
-        // location updates: at least 1 meter and 200millsecs change
-        locationManager.requestLocationUpdates(provider, 200, 1, locationListener);
-
-        //accelerometer
-        sensorMgr = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        Sensor sensorAccelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        AccelerometerListener accelerometerListener = new AccelerometerListener();
-        sensorMgr.registerListener(accelerometerListener, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
+        setAboutlocation();
+        setAboutAccelerometer();
 
         Log.e(Fragment_StartRecordLap.class.getName(), String.valueOf(round_id));
     }
@@ -139,7 +118,6 @@ public class Fragment_StartRecordLap extends Fragment {
         tvSpeed = (TextView) view.findViewById(R.id.tv_Speed);
         tvSatellite_InView = (TextView) view.findViewById(R.id.tv_satellite_in_view);
         tvSatellite_InUse = (TextView) view.findViewById(R.id.tv_satellite_in_use);
-        parseUSER = ParseUser.getCurrentUser();
 
         // get location & round id from fragment_chooseStartPoint
         savedInstanceState = getArguments();
@@ -147,12 +125,38 @@ public class Fragment_StartRecordLap extends Fragment {
             // then you have arguments
             StartLocation = getArguments().getParcelable("location");
             round_id = getArguments().getLong("round_id");
-
             Log.e("location start ", StartLocation.toString() + "Round id : " + round_id);
         } else {
-            // no arguments supplied...
             Log.e("location & round", " not set");
         }
         return view;
+    }
+
+
+    public void setAboutAccelerometer() {
+        //accelerometer
+        sensorMgr = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        Sensor sensorAccelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        AccelerometerListener accelerometerListener = new AccelerometerListener();
+        sensorMgr.registerListener(accelerometerListener, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
+    }
+
+    public void setAboutlocation() {
+
+        // Define the criteria how to select the location provider
+        criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setCostAllowed(false);
+
+        // get the best provider depending on the criteria
+        locationManager = (LocationManager) super.getActivity().getSystemService(Context.LOCATION_SERVICE);
+        provider = locationManager.getBestProvider(criteria, false);
+        location = locationManager.getLastKnownLocation(provider);  // the last known location of this provider
+        locationListener = new LocationListener();
+        GPS_Listener gpsListener = new GPS_Listener(locationManager);
+        locationManager.addGpsStatusListener(gpsListener);
+
+        // location updates: at least 1 meter and 200millsecs change
+        locationManager.requestLocationUpdates(provider, 200, 1, locationListener);
     }
 }
