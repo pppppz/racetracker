@@ -119,13 +119,12 @@ public class Fragment_ChooseStartPoint extends Fragment {
         myMap.setOnMapLongClickListener(myOnMapLongClickListener);
 
         //get current location and set into map and text view
-        LatLng currentLocation = LocationListener.CurrentLocation(getActivity());
-        //LatLng currentLocation = new LatLng(13.7560196 , 100.5322547);
-        myMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation)); //move camera to current
+        location = LocationListener.CurrentLocation(getActivity());
+        myMap.moveCamera(CameraUpdateFactory.newLatLng(location)); //move camera to current
         myMap.animateCamera(CameraUpdateFactory.zoomTo(15)); // can set 2-21
         marker = null;
-        tvLatitude.setText("Latitude : " + currentLocation.latitude);
-        tvLongitude.setText("Longitude : " + currentLocation.longitude);
+        tvLatitude.setText("Latitude : " + location.latitude);
+        tvLongitude.setText("Longitude : " + location.longitude);
     }
 
 

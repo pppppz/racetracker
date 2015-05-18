@@ -14,12 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.app.raceanalyzer.Database.createLapHeaderDB;
-import com.app.raceanalyzer.Database.createLapLocationChangeDB;
-import com.app.raceanalyzer.Database.createRecordDB;
 import com.app.raceanalyzer.SensorListener.AccelerometerListener;
 import com.app.raceanalyzer.SensorListener.GPS_Listener;
 import com.app.raceanalyzer.SensorListener.LocationListener;
@@ -39,20 +35,15 @@ public class Fragment_StartRecordLap extends Fragment {
     long bestLapTime = 0L;
     long startTime = 0L;
     LatLng StartLocation;
+    private Location location;
     //   public static double latitude;
     //  public static double longitude;
-    private Location location;
     private Handler customHandler = new Handler();
 
-    //connect DB
-    private createLapLocationChangeDB lapDB;
-    private createRecordDB recordDB;
-    private createLapHeaderDB lapHeaderDB;
 
     //parse
     private LocationListener locationListener;
     private View view;
-    private Button startButton;
     private TextView timerValue;
     private SensorManager sensorMgr;
     //GPS
@@ -111,7 +102,7 @@ public class Fragment_StartRecordLap extends Fragment {
         // declare xml to java
         view = inflater.inflate(R.layout.fragment_record_lap, container, false);
         timerValue = (TextView) view.findViewById(R.id.timerValue);
-        startButton = (Button) view.findViewById(R.id.startButton);
+        //startButton = (Button) view.findViewById(R.id.startButton);
         tvSpeed = (TextView) view.findViewById(R.id.tv_Speed);
         tvSatellite_InView = (TextView) view.findViewById(R.id.tv_satellite_in_view);
         tvSatellite_InUse = (TextView) view.findViewById(R.id.tv_satellite_in_use);
@@ -154,6 +145,8 @@ public class Fragment_StartRecordLap extends Fragment {
         locationManager.addGpsStatusListener(gpsListener);
 
         // location updates: at least 1 meter and 200millsecs change
-        locationManager.requestLocationUpdates(provider, 200, 1, locationListener);
+        int MIN_SEC_WHEN_CHANGE = 200;
+        int MIN_METER_CHANGE = 1;
+        locationManager.requestLocationUpdates(provider, MIN_SEC_WHEN_CHANGE, MIN_METER_CHANGE, locationListener);
     }
 }

@@ -41,6 +41,7 @@ public class createRecordDB {
 
 
         Cursor mCursor = database.query(true, TABLE_RECORD, new String[]{USER_ID}, null, null, null, null, null, null);
+        //Cursor mCursor = database.query;
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
