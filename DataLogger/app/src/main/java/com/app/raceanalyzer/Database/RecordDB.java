@@ -6,18 +6,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class createRecordDB {
+public class RecordDB {
 
     private static final String TABLE_RECORD = "Record";
     private static final String USER_ID = "user_id";
     private static final String ROUND_ID = "round_id";
-    private static final String BEST_LAP = "bestLap";
-    private final int round = 0;
     private DatabaseHelper dbHelper;
     private SQLiteDatabase database;
 
 
-    public createRecordDB(Context context) {
+    public RecordDB(Context context) {
 
         dbHelper = new DatabaseHelper(context);
         database = dbHelper.getWritableDatabase();
@@ -27,7 +25,7 @@ public class createRecordDB {
 
         ContentValues values = new ContentValues();
         values.put(USER_ID, _user_id);
-        Log.e(createRecordDB.class.getName(), _user_id);
+        Log.e(RecordDB.class.getName(), _user_id);
         return database.insert(TABLE_RECORD, null, values);
     }
 
@@ -48,12 +46,11 @@ public class createRecordDB {
         return mCursor;
     }
 
-    public int updateRecord(String user_id, long bestLap, long round_id) {
+    public int updateRecord(String user_id, long round_id) {
 
         ContentValues values = new ContentValues();
         values.put(USER_ID, user_id);
         values.put(ROUND_ID, round_id);
-        values.put(BEST_LAP, bestLap);
 
         return database.update(TABLE_RECORD, values, ROUND_ID + "=?", new String[]{String.valueOf(round_id)});
     }

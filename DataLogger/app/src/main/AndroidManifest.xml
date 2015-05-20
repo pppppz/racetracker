@@ -8,6 +8,7 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"  />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
 
 
@@ -55,6 +56,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="fa95c5d3316c7830b9e84f4a37b018a06337e1ef" />
     </application>
 
 </manifest>

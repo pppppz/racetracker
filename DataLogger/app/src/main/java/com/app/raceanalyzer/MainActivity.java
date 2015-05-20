@@ -150,6 +150,8 @@ public class MainActivity extends ActionBarActivity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
         // Fragment_Record  , Will add a counter here
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, "22"));
+// Fragment_Record  , Will add a counter here
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1), true, "55"));
 
         // Recycle the typed array
         navMenuIcons.recycle();
@@ -205,6 +207,9 @@ public class MainActivity extends ActionBarActivity {
                 break;
             case 2:
                 fragment = new Fragment_Profile();
+                break;
+            case 3:
+                fragment = new Fragment_Present_Polyline();
                 break;
             default:
                 fragment = new Fragment_CreateRecord();

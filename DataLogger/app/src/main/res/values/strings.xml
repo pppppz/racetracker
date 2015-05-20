@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Data Logger</string>
+    <string name="app_name">Race Analyzer</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="drawer_open">Slider Menu Opened</string>
@@ -15,6 +15,9 @@
         <item>Home</item>
         <item>Car Information</item>
         <item >Record</item>
+        <item>Test Polyline</item>
+
+
     </string-array>
     
     <!-- Nav Drawer List Item Icons -->

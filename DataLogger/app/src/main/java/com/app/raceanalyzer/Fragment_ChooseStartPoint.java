@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.app.raceanalyzer.Database.createRecordDB;
+import com.app.raceanalyzer.Database.RecordDB;
 import com.app.raceanalyzer.SensorListener.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,23 +22,24 @@ import com.parse.ParseUser;
 
 public class Fragment_ChooseStartPoint extends Fragment {
 
-    private long round_id;
 
     //UI
     private TextView tvLatitude, tvLongitude;
     private Button btnSaveLocationToRecord;
     private View view;
-    private createRecordDB recordDB;
+
+    //database
+    private RecordDB RecordDB;
 
     //material
     private ParseUser parseUSER;
     private GoogleMap myMap;
     private Marker marker;
+    private long round_id;
+    // private LatLng location = new LatLng(13.756854, 100.533728);
     private LatLng location;
 
-    /**
-     * create marker point and set text
-     */
+    //create marker point and set text
     GoogleMap.OnMyLocationButtonClickListener myLocationButtonClickListener = new GoogleMap.OnMyLocationButtonClickListener() {
         @Override
         public boolean onMyLocationButtonClick() {
@@ -76,17 +77,16 @@ public class Fragment_ChooseStartPoint extends Fragment {
         @Override
         public void onClick(View v) {
 
-            addDataToSQLite();
+            //create record return index which equal round_id
+            round_id = createRecordToSQLite();
+
+            // switch Fragment to start record lap
             Bundle bundle = new Bundle(); //  bundle function is management resource , state
             bundle.putParcelable("location", location);
             bundle.putLong("round_id", round_id);
-
-            // switch Fragment to start record lap
             Fragment fragment = new Fragment_StartRecordLap();
             fragment.setArguments(bundle);
             new switchFragment(fragment, getFragmentManager()).doSwitch();
-
-
         }
     };
 
@@ -103,14 +103,14 @@ public class Fragment_ChooseStartPoint extends Fragment {
         btnSaveLocationToRecord.setOnClickListener(btnSaveLocationToRecordListener);
 
         //set map
-        setMap();
+        createMap();
 
         //create Record Activity
-        recordDB = new createRecordDB(getActivity());
+        RecordDB = new RecordDB(getActivity());
         return view;
     }
 
-    private void setMap() {
+    private void createMap() {
         myMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
         myMap.setMyLocationEnabled(true); //enable permission current location
 
@@ -128,13 +128,12 @@ public class Fragment_ChooseStartPoint extends Fragment {
     }
 
 
-    protected void addDataToSQLite() {
+    protected long createRecordToSQLite() {
         parseUSER = ParseUser.getCurrentUser();
-        long insert_rowID = recordDB.addNewRecord(parseUSER.getUsername());
+        long insert_rowID = RecordDB.addNewRecord(parseUSER.getUsername());
         Log.e(Fragment_ChooseStartPoint.class.getName(), "Lap id : " + insert_rowID);
-
         //the rowID of the newly inserted row, or -1 if an error occurred
-        round_id = insert_rowID;
+        return insert_rowID;
     }
 
     private void setLocationToTextView(LatLng location) {

@@ -120,7 +120,6 @@ public class Fragment_StartRecordLap extends Fragment {
         return view;
     }
 
-
     public void setAboutAccelerometer() {
 
         sensorMgr = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -140,9 +139,10 @@ public class Fragment_StartRecordLap extends Fragment {
         locationManager = (LocationManager) super.getActivity().getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(criteria, false);
         location = locationManager.getLastKnownLocation(provider);  // the last known location of this provider
-        locationListener = new LocationListener(StartLocation);
+        locationListener = new LocationListener(StartLocation, round_id, getActivity());
         GPS_Listener gpsListener = new GPS_Listener(locationManager);
         locationManager.addGpsStatusListener(gpsListener);
+
 
         // location updates: at least 1 meter and 200millsecs change
         int MIN_SEC_WHEN_CHANGE = 200;

@@ -4,9 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-public class createLapHeaderDB {
+public class HeadLapDatabase {
 
-    private static final String DB_NAME = "LapHeader";
+    private static final String DB_NAME = "HeadLap";
     private DatabaseHelper dbHelper;
     private SQLiteDatabase database;
     private String USER_ID = "user_id";
@@ -14,18 +14,9 @@ public class createLapHeaderDB {
     private String ROUND_ID = "round_id";
 
 
-    public createLapHeaderDB(Context context) {
+    public HeadLapDatabase(Context context) {
         dbHelper = new DatabaseHelper(context);
         database = dbHelper.getWritableDatabase();
-    }
-
-    public long addNewLapHeader(String user_id,
-                                double lapTime, long round_id) {
-        ContentValues values = new ContentValues();
-        values.put(LAP_TIME, lapTime);
-        values.put(ROUND_ID, round_id);
-        values.put(USER_ID, user_id);
-        return database.insert(DB_NAME, null, values);
     }
 
     public int updateRecord(String user_id, double lapTime, long round_id) {
@@ -36,5 +27,12 @@ public class createLapHeaderDB {
         values.put(LAP_TIME, lapTime);
 
         return database.update(DB_NAME, values, LAP_TIME + "=?", new String[]{String.valueOf(lapTime)});
+    }
+
+    public long addNewLap(String uid, long rid) {
+        ContentValues values = new ContentValues();
+        values.put(USER_ID, uid);
+        values.put(ROUND_ID, rid);
+        return database.insert(DB_NAME, null, values);
     }
 }
