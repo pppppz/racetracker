@@ -1,16 +1,17 @@
 package com.app.raceanalyzer.Database;
 
-public class lapChangeAdapter {
+public class LapChange {
+
     private String USER_ID;
     private double AXIS_X;
     private double AXIS_Y;
     private double AXIS_Z;
     private double VELOCITY;
     private int ROUND_ID;
-    private String Lat;
-    private String Lng;
-    private int LAP_ID;
-    private String TIME = "time";
+    private double Lat;
+    private double Lng;
+    private int LAPCOUNT;
+    private int HEADLAP_KEYID;
 
 
     public String getId() {
@@ -61,27 +62,37 @@ public class lapChangeAdapter {
         this.ROUND_ID = roundid;
     }
 
-    public String getLat() {
+    public double getLat() {
         return Lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(double lat) {
         this.Lat = lat;
     }
 
-    public String getLng() {
+    public double getLng() {
         return Lng;
     }
 
-    public void setLng(String lng) {
+    public void setLng(double lng) {
         this.Lng = lng;
     }
 
-    public int getLapID() {
-        return LAP_ID;
+    public int getLAPCOUNT() {
+        return LAPCOUNT;
     }
 
-    public void setLapID(int lapID) {
-        this.LAP_ID = lapID;
+    public void setLAPCOUNT(int LAPCOUNT) {
+        this.LAPCOUNT = LAPCOUNT;
     }
+
+    public int getHeadLap_KEYID() {
+        return HEADLAP_KEYID;
+    }
+
+    public void setHeadLap_KEYID(int headlapKeyID) {
+        this.HEADLAP_KEYID = headlapKeyID;
+    }
+
+
 }

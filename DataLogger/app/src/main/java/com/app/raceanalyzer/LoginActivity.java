@@ -49,7 +49,13 @@ public class LoginActivity extends Activity {
         finish();
     }
 
-
+    //insert menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(com.app.raceanalyzer.R.menu.login, menu);
+        return true;
+    }
 
     private class loginTask extends AsyncTask<Void, Integer, Void> {
 
@@ -65,7 +71,7 @@ public class LoginActivity extends Activity {
             pd.setIndeterminate(false);
             pd.setMax(100);
             pd.setProgress(0);
-            pd.show();
+//            pd.show();
 
         }
 
@@ -116,15 +122,6 @@ public class LoginActivity extends Activity {
 
 
         }
-    }
-
-
-    //insert menu
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(com.app.raceanalyzer.R.menu.login, menu);
-        return true;
     }
 
 

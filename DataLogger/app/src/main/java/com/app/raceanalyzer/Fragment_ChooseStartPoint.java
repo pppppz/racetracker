@@ -1,5 +1,6 @@
 package com.app.raceanalyzer;
 
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -23,11 +24,11 @@ import com.parse.ParseUser;
 public class Fragment_ChooseStartPoint extends Fragment {
 
 
+    protected LocationManager locationManager;
     //UI
     private TextView tvLatitude, tvLongitude;
     private Button btnSaveLocationToRecord;
     private View view;
-
     //database
     private RecordDB RecordDB;
 
@@ -35,9 +36,9 @@ public class Fragment_ChooseStartPoint extends Fragment {
     private ParseUser parseUSER;
     private GoogleMap myMap;
     private Marker marker;
-    private long round_id;
-    // private LatLng location = new LatLng(13.756854, 100.533728);
-    private LatLng location;
+    private long record_id;
+    private LatLng location = new LatLng(13.756854, 100.533728);
+    // / private LatLng location;
 
     //create marker point and set text
     GoogleMap.OnMyLocationButtonClickListener myLocationButtonClickListener = new GoogleMap.OnMyLocationButtonClickListener() {
@@ -57,18 +58,18 @@ public class Fragment_ChooseStartPoint extends Fragment {
      * when press long clicked in map for marker into the map and set location to text field
      */
     GoogleMap.OnMapLongClickListener myOnMapLongClickListener = new GoogleMap.OnMapLongClickListener() {
-                @Override
-                public void onMapLongClick(LatLng point) {
-                    //clear exist marker
-                    myMap.clear();
+        @Override
+        public void onMapLongClick(LatLng point) {
+            //clear exist marker
+            myMap.clear();
 
-                    //add new marker , set text to display to screen , set location
-                    marker = myMap.addMarker(new MarkerOptions().position(point).title(point.toString()));
+            //add new marker , set text to display to screen , set location
+            marker = myMap.addMarker(new MarkerOptions().position(point).title(point.toString()));
 
-                    //set latitude , longitude to text field
-                    setLocationToTextView(point);
-                }
-            };
+            //set latitude , longitude to text field
+            setLocationToTextView(point);
+        }
+    };
 
     /**
      * listener button save -> send location to start record lap
@@ -77,13 +78,15 @@ public class Fragment_ChooseStartPoint extends Fragment {
         @Override
         public void onClick(View v) {
 
-            //create record return index which equal round_id
-            round_id = createRecordToSQLite();
+            //get current location
+            location = LocationListener.CurrentLocation(getActivity());
 
+            //create record return index which equal round_id
+            record_id = createRecordToSQLite();
             // switch Fragment to start record lap
             Bundle bundle = new Bundle(); //  bundle function is management resource , state
             bundle.putParcelable("location", location);
-            bundle.putLong("round_id", round_id);
+            bundle.putLong("record_id", record_id);
             Fragment fragment = new Fragment_StartRecordLap();
             fragment.setArguments(bundle);
             new switchFragment(fragment, getFragmentManager()).doSwitch();
@@ -131,7 +134,7 @@ public class Fragment_ChooseStartPoint extends Fragment {
     protected long createRecordToSQLite() {
         parseUSER = ParseUser.getCurrentUser();
         long insert_rowID = RecordDB.addNewRecord(parseUSER.getUsername());
-        Log.e(Fragment_ChooseStartPoint.class.getName(), "Lap id : " + insert_rowID);
+        Log.e(Fragment_ChooseStartPoint.class.getName(), "Record id : " + insert_rowID);
         //the rowID of the newly inserted row, or -1 if an error occurred
         return insert_rowID;
     }

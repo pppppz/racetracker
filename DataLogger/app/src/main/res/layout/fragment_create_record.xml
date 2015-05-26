@@ -5,9 +5,16 @@
     android:orientation="vertical">
 
     <Button
+        android:id="@+id/btnChooseStartPoint"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Choose Start Point"
-        android:id="@+id/btnChooseStartPoint" />
+        android:text="Choose Start Point" />
+
+    <Button
+        android:id="@+id/btnStartFromCurrent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Start from current location!" />
+
 
 </LinearLayout>

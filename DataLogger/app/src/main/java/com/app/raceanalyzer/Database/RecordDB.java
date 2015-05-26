@@ -8,9 +8,9 @@ import android.util.Log;
 
 public class RecordDB {
 
+    public static final String USER_ID = "user_id";
+    public static final String RECORD_ID = "record_id";
     private static final String TABLE_RECORD = "Record";
-    private static final String USER_ID = "user_id";
-    private static final String ROUND_ID = "round_id";
     private DatabaseHelper dbHelper;
     private SQLiteDatabase database;
 
@@ -30,16 +30,13 @@ public class RecordDB {
     }
 
 
-    public Cursor getBiggestInTheColumn() {
-        return database.query(TABLE_RECORD, null,
-                null, null, null, null, null);
-    }
-
-    public Cursor readAllLocation() {
+    public Cursor readAllRecord() {
 
 
-        Cursor mCursor = database.query(true, TABLE_RECORD, new String[]{USER_ID}, null, null, null, null, null, null);
-        //Cursor mCursor = database.query;
+        //    Cursor mCursor = database.query(true, TABLE_RECORD, new String[]{USER_ID , ROUND_ID}, null, null, null, null, null, null);
+        //  String query = "select * from " + TABLE_RECORD ;
+        //     Cursor mCursor = database.rawQuery(query , null);
+        Cursor mCursor = database.rawQuery("select Record.record_id as _id, Record.* from Record", null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
@@ -50,9 +47,9 @@ public class RecordDB {
 
         ContentValues values = new ContentValues();
         values.put(USER_ID, user_id);
-        values.put(ROUND_ID, round_id);
+        values.put(RECORD_ID, round_id);
 
-        return database.update(TABLE_RECORD, values, ROUND_ID + "=?", new String[]{String.valueOf(round_id)});
+        return database.update(TABLE_RECORD, values, RECORD_ID + "=?", new String[]{String.valueOf(round_id)});
     }
 
 

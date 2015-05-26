@@ -49,27 +49,76 @@ public class Fragment_AddCar extends Fragment {
     private EditText et_Traction_control;
 
 
+    private void declareUI() {
+        //version
+        et_Version = (EditText) view.findViewById(R.id.et_Version);
+
+        //engine
+        et_torque_nm = (EditText) view.findViewById(R.id.et_torque_nm);
+        et_torque_rpm = (EditText) view.findViewById(R.id.et_torque_rpm);
+        et_hp = (EditText) view.findViewById(R.id.et_hp);
+        et_hp_rpm = (EditText) view.findViewById(R.id.et_hp_rpm);
+
+        //wheel (tires , rims)
+        et_front_rim_size = (EditText) view.findViewById(R.id.et_front_rim_size);
+        et_rear_rim_size = (EditText) view.findViewById(R.id.et_rear_rim_size);
+        et_front_tires_size = (EditText) view.findViewById(R.id.et_front_tires_size);
+        et_rear_tires_size = (EditText) view.findViewById(R.id.et_rear_tires_size);
+
+        //body
+        et_driveline_layout = (EditText) view.findViewById(R.id.et_driveline_layout);
+        et_height = (EditText) view.findViewById(R.id.et_height);
+        et_weight_all = (EditText) view.findViewById(R.id.et_weight_all);
+        et_wheelbase = (EditText) view.findViewById(R.id.et_wheelbase);
+        et_weight_front_percent = (EditText) view.findViewById(R.id.et_weight_front_percent);
+
+        //others
+        et_Traction_control = (EditText) view.findViewById(R.id.et_traction_control);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // put your code here...
-    }
-
     @Override
     public void onCreateOptionsMenu(
             Menu menu, MenuInflater inflater) {
-      //  menu.clear();
+        //  menu.clear();
 
         inflater.inflate(R.menu.save_car, menu);
 
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        //resource
+        view = inflater.inflate(R.layout.fragment_addcar, container, false);
+        a = super.getActivity();
+        declareUI();
+        return view;
+
+    }
+
+
+    //create choice menu in action bar eg. Logout , Setting
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.save_car:
+                saveCar();
+                return true;
+        }
+        return false;
     }
 
 
@@ -83,6 +132,18 @@ public class Fragment_AddCar extends Fragment {
         super.onPrepareOptionsMenu(menu);
     }
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // put your code here...
+    }
 
     private int getInt(EditText editText) throws NumberFormatException {
         return Integer.valueOf(editText.getText().toString());
@@ -149,67 +210,11 @@ public class Fragment_AddCar extends Fragment {
     }
 
 
-    //create choice menu in action bar eg. Logout , Setting
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.save_car:
-                saveCar();
-                return true;
-        }
-        return false;
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-
-    private void declareUI(){
-        //version
-        et_Version = (EditText) view.findViewById(R.id.et_Version);
-
-        //engine
-        et_torque_nm = (EditText) view.findViewById(R.id.et_torque_nm);
-        et_torque_rpm = (EditText) view.findViewById(R.id.et_torque_rpm);
-        et_hp = (EditText) view.findViewById(R.id.et_hp);
-        et_hp_rpm = (EditText) view.findViewById(R.id.et_hp_rpm);
-
-        //wheel (tires , rims)
-        et_front_rim_size = (EditText) view.findViewById(R.id.et_front_rim_size);
-        et_rear_rim_size = (EditText) view.findViewById(R.id.et_rear_rim_size);
-        et_front_tires_size = (EditText) view.findViewById(R.id.et_front_tires_size);
-        et_rear_tires_size = (EditText) view.findViewById(R.id.et_rear_tires_size);
-
-        //body
-        et_driveline_layout = (EditText) view.findViewById(R.id.et_driveline_layout);
-        et_height = (EditText) view.findViewById(R.id.et_height);
-        et_weight_all = (EditText) view.findViewById(R.id.et_weight_all);
-        et_wheelbase = (EditText) view.findViewById(R.id.et_wheelbase);
-        et_weight_front_percent = (EditText) view.findViewById(R.id.et_weight_front_percent);
-
-        //others
-        et_Traction_control = (EditText) view.findViewById(R.id.et_traction_control);
-    }
 
 
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        //resource
-        view = inflater.inflate(R.layout.fragment_addcar, container, false);
-        a = super.getActivity();
-        declareUI();
-        return view;
 
-    }
+
+
 }

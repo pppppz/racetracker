@@ -14,8 +14,8 @@
     <string-array name="nav_drawer_items">
         <item>Home</item>
         <item>Car Information</item>
-        <item >Record</item>
-        <item>Test Polyline</item>
+        <item>User Information</item>
+        <item>Record</item>
 
 
     </string-array>
@@ -25,9 +25,8 @@
     <array name="nav_drawer_icons">
         <item>@drawable/ic_home</item>
         <item>@drawable/car</item>
-        <item>@drawable/db</item>
-        <item>@drawable/pf</item>
-        <item>@drawable/speed</item>
+        <item>@drawable/profile</item>
+        <item>@drawable/record</item>
     </array>
     
     <!-- Content Description -->

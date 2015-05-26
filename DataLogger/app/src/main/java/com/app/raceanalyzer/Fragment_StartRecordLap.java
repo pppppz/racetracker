@@ -49,7 +49,7 @@ public class Fragment_StartRecordLap extends Fragment {
     //GPS
     private Criteria criteria;
     private String provider;
-    private long round_id;
+    private long record_id;
 
 
     private Runnable updateTimerThread = new Runnable() {
@@ -67,6 +67,7 @@ public class Fragment_StartRecordLap extends Fragment {
             customHandler.postDelayed(this, 0);
         }
     };
+
 
     @Override
     public void onResume() {
@@ -87,7 +88,6 @@ public class Fragment_StartRecordLap extends Fragment {
 
         setAboutLocation();
         setAboutAccelerometer();
-        Log.e(Fragment_StartRecordLap.class.getName(), String.valueOf(round_id));
     }
 
     @Override
@@ -112,8 +112,8 @@ public class Fragment_StartRecordLap extends Fragment {
         if (savedInstanceState != null) {
             // then you have arguments
             StartLocation = getArguments().getParcelable("location");
-            round_id = getArguments().getLong("round_id");
-            Log.e("location start ", StartLocation.toString() + "Round id : " + round_id);
+            record_id = getArguments().getLong("record_d");
+            Log.e("location start ", StartLocation.toString() + "Record id : " + record_id);
         } else {
             Log.e("location & round", " not set");
         }
@@ -139,7 +139,7 @@ public class Fragment_StartRecordLap extends Fragment {
         locationManager = (LocationManager) super.getActivity().getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(criteria, false);
         location = locationManager.getLastKnownLocation(provider);  // the last known location of this provider
-        locationListener = new LocationListener(StartLocation, round_id, getActivity());
+        locationListener = new LocationListener(StartLocation, record_id, getActivity());
         GPS_Listener gpsListener = new GPS_Listener(locationManager);
         locationManager.addGpsStatusListener(gpsListener);
 
