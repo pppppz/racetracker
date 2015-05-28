@@ -19,6 +19,14 @@
 
 
     </string-array>
+
+
+    <string-array name="data_type">
+        <item>Axis x</item>
+        <item>Axis y</item>
+        <item>Axis z</item>
+        <item>Velocity</item>
+    </string-array>
     
     <!-- Nav Drawer List Item Icons -->
     <!-- Keep them in order as the titles are in -->

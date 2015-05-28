@@ -26,30 +26,45 @@ import java.util.List;
 public class Fragment_DisplayGraph extends Fragment {
 
     long record_id;
-    long lapchoose;
+    long lap_choose;
+    //listener button Location
     ImageButton.OnClickListener buttonLocationListener = new ImageButton.OnClickListener() {
         @Override
         public void onClick(View v) {
-            // switch Fragment to start record lap
+            /** send data switch to display data */
             Bundle bundle = new Bundle(); //  bundle function is management resource , state
-            bundle.putLong("lapchoose", lapchoose);
+            bundle.putLong("lap_choose", lap_choose);
             bundle.putLong("record_id", record_id);
             Fragment fragment = new Fragment_DisplayData();
             fragment.setArguments(bundle);
             new switchFragment(fragment, getFragmentManager()).doSwitch();
-
-
         }
     };
+    private int dataTypePosition;
     private View view;
-    private Spinner spinner;
+    private Spinner spinnerHeadLap, spinnerDataType;
     private GraphView graph;
-    Spinner.OnItemSelectedListener spinnerSelectListener = new AdapterView.OnItemSelectedListener() {
+    private LineGraphSeries<DataPoint> line;
+    //listener spinner data type
+    Spinner.OnItemSelectedListener spinnerTypeDataListener = new AdapterView.OnItemSelectedListener() {
+        // data type (reference position by data_type array in string.xml)
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            dataTypePosition = position;
+            drawGraph(lap_choose, position);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    };
+    //listener spinner head lap
+    Spinner.OnItemSelectedListener spinnerHeadLapListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String getSelectText = parent.getSelectedItem().toString();
             long select = Long.parseLong(getSelectText);
-            drawGraph(select);
+            drawGraph(select, spinnerDataType.getSelectedItemPosition());
         }
 
         @Override
@@ -66,7 +81,7 @@ public class Fragment_DisplayGraph extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        drawGraph(lapchoose);
+        drawGraph(lap_choose, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -80,76 +95,95 @@ public class Fragment_DisplayGraph extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_display_graph, container, false);
         graph = (GraphView) view.findViewById(R.id.graph);
+
+
+        /** ----------------------------------DECLARE UI--------------------------------- */
+
+        //button
         buttonLocation = (ImageButton) view.findViewById(R.id.ButtonMapAndTime);
         buttonLocation.setOnClickListener(buttonLocationListener);
 
-        //set spinner and listener
-        spinner = (Spinner) view.findViewById(R.id.spinnerLapID);
-        spinner.setOnItemSelectedListener(spinnerSelectListener);
+        //set head lap spinner and listener
+        spinnerHeadLap = (Spinner) view.findViewById(R.id.spinnerLapID);
+        spinnerHeadLap.setOnItemSelectedListener(spinnerHeadLapListener);
 
+        //set data type spinner & listener for
+        spinnerDataType = (Spinner) view.findViewById(R.id.spinnerTypeData);
+        spinnerDataType.setOnItemSelectedListener(spinnerTypeDataListener);
+
+        /** ----------------------------FINISH DECLARE UI--------------------------------------- */
         // get location & round id from fragment_chooseStartPoint
         savedInstanceState = getArguments();
         if (savedInstanceState != null) {
             // then you have arguments
-            lapchoose = getArguments().getLong("lapchoose");
+            lap_choose = getArguments().getLong("lap_choose");
             record_id = getArguments().getLong("record_id");
         } else {
             Log.e("record id & lap choose", " not set");
         }
 
         setSpinnerHeadLap();
+        setSpinnerDataType();
         return view;
     }
 
-    private void setSpinnerHeadLap() {
+    public void drawGraph(long select, int dataType) {
 
-        HeadLapDatabase db = new HeadLapDatabase(getActivity());
-        List<Long> labels = db.readAllHeadLap(Resource.User, record_id);
+        //cursor select = lap
+        lap_choose = select;
 
-        // Creating adapter for spinner
-        ArrayAdapter<Long> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, labels);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
-    }
-
-    public void drawGraph(long select) {
-        lapchoose = select;
-
+        //count index of graph
         int count = 0;
 
-        LineGraphSeries<DataPoint> series_x = new LineGraphSeries<>();
-        series_x.setColor(Color.RED);
-      /*  LineGraphSeries<DataPoint> series_y = new LineGraphSeries<>();
-        series_y.setColor(Color.GREEN);
-        LineGraphSeries<DataPoint> series_z = new LineGraphSeries<>();
-        series_z.setColor(Color.BLUE);*/
+        //clear graph , query data
+        graph.removeAllSeries();
+        line = new LineGraphSeries<>();
         LapLocationChangeDB db = new LapLocationChangeDB(getActivity());
-        List<LapChange> list = db.readDataLapChange(Resource.User, lapchoose, record_id);
+        List<LapChange> list = db.readDataLapChange(Resource.User, lap_choose, record_id);
 
-        // loop for draw until finish
+        // loop for draw graph until finish
         for (LapChange lapChange : list) {
-            series_x.appendData(new DataPoint(count, lapChange.getVelocity()), false, 200);
-            //series_y.appendData(new DataPoint(count , lapChange.getAXIS_Y()) , false , 200);
-            //series_z.appendData(new DataPoint(count , lapChange.getAXIS_Z()) , false , 200);
+            if (dataType == 0) {
+                line.appendData(new DataPoint(count, lapChange.getAXIS_X()), false, 200);
+                line.setColor(Color.RED);
+            } else if (dataType == 1) {
+                line.appendData(new DataPoint(count, lapChange.getAXIS_Y()), false, 200);
+                line.setColor(Color.GREEN);
+            } else if (dataType == 2) {
+                line.appendData(new DataPoint(count, lapChange.getAXIS_Z()), false, 200);
+                line.setColor(Color.BLUE);
+            } else if (dataType == 3) {
+                line.appendData(new DataPoint(count, lapChange.getVelocity()), true, 200);
+                line.setColor(Color.CYAN);
+            } else {
+                Log.e(Fragment_DisplayGraph.class.getName(), "data not found");
+            }
             count++;
         }
 
-
-        graph.addSeries(series_x);
-        //    graph.addSeries(series_y);
-        //  graph.addSeries(series_z);
-
+        //add line into graph
+        graph.addSeries(line);
     }
 
+    private void setSpinnerDataType() {
+        //get array list from string.xml to set data type
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.data_type, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDataType.setAdapter(adapter);
+    }
 
-
+    private void setSpinnerHeadLap() {
+        //get lap from head lap for choose lap
+        HeadLapDatabase db = new HeadLapDatabase(getActivity());
+        List<Long> labels = db.readAllHeadLap(Resource.User, record_id);
+        ArrayAdapter<Long> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, labels);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerHeadLap.setAdapter(dataAdapter);
+    }
 }

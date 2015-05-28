@@ -1,6 +1,5 @@
 package com.app.raceanalyzer;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,14 +16,12 @@ import com.parse.ParseUser;
 
 public class Fragment_CreateRecord extends Fragment {
 
-    Activity activity;
     /**
      * button to switch to fragment choose map
      */
     Button.OnClickListener chooseStartPointListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             new switchFragment(new Fragment_ChooseStartPoint(), fragmentManager).doSwitch();
         }
@@ -46,7 +43,6 @@ public class Fragment_CreateRecord extends Fragment {
             // switch Fragment to start record
             Bundle bundle = new Bundle(); //  bundle function is management resource , state
             bundle.putParcelable("location", location);
-            Log.e("createrecord", String.valueOf(record_id));
             bundle.putLong("record_id", record_id);
             Fragment fragment = new Fragment_StartRecordLap();
             fragment.setArguments(bundle);

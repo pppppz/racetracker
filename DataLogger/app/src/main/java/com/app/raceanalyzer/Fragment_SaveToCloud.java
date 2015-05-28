@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.app.raceanalyzer.Database.HeadLapDatabase;
-import com.parse.ParseUser;
 
 public class Fragment_SaveToCloud extends Fragment {
 
@@ -60,7 +59,6 @@ public class Fragment_SaveToCloud extends Fragment {
             int min = sec / 60;
             sec = sec % 60;
             int milliseconds = (int) (timeLap % 1000);
-            String user = ParseUser.getCurrentUser().getUsername();
             tvExample.setText("" + min + ":"
                     + String.format("%02d", sec) + ":" + String.format("%03d", milliseconds));
         } else {

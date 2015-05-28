@@ -28,7 +28,7 @@ import java.util.List;
 
 public class Fragment_DisplayData extends Fragment {
 
-    public static long lapchoose;
+    public static long lap_choose;
     private ImageButton btnGraph;
     private Spinner spinner;
     private View view;
@@ -37,28 +37,23 @@ public class Fragment_DisplayData extends Fragment {
         @Override
         public void onClick(View v) {
 
-
             // switch Fragment to start record lap
             Bundle bundle = new Bundle(); //  bundle function is management resource , state
-            bundle.putLong("lapchoose", lapchoose);
+            bundle.putLong("lap_choose", lap_choose);
             bundle.putLong("record_id", record_id);
             Fragment fragment = new Fragment_DisplayGraph();
             fragment.setArguments(bundle);
             new switchFragment(fragment, getFragmentManager()).doSwitch();
-
         }
     };
     private GoogleMap myMap;
-
-    //    LatLng start = new LatLng(13.748223, 100.533957); //BTS Siam
-    //  LatLng ratchamung = new LatLng(13.756164, 100.618855);
     private Polyline line;
     Spinner.OnItemSelectedListener spinnerSelectListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String getSelectText = parent.getSelectedItem().toString();
-            lapchoose = Long.parseLong(getSelectText);
-            drawFromQuery(lapchoose);
+            lap_choose = Long.parseLong(getSelectText);
+            drawFromQuery(lap_choose);
         }
 
         @Override
@@ -69,38 +64,6 @@ public class Fragment_DisplayData extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    private void setSpinnerHeadLap() {
-
-        HeadLapDatabase db = new HeadLapDatabase(getActivity());
-        List<Long> labels = db.readAllHeadLap(Resource.User, record_id);
-
-        // Creating adapter for spinner
-        ArrayAdapter<Long> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, labels);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -121,26 +84,60 @@ public class Fragment_DisplayData extends Fragment {
         if (savedInstanceState != null) {
             // then you have arguments
             record_id = getArguments().getLong("record_id");
-            lapchoose = getArguments().getLong("lapchoose");
+            lap_choose = getArguments().getLong("lap_choose");
         } else {
-            Log.e("location & round", " not set");
+            Log.e("lap choose & record", " not set");
         }
+
+
         drawMap();
         setSpinnerHeadLap();
-
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    private void setSpinnerHeadLap() {
+
+        HeadLapDatabase db = new HeadLapDatabase(getActivity());
+        List<Long> labels = db.readAllHeadLap(Resource.User, record_id);
+
+        // Creating adapter for spinner
+        ArrayAdapter<Long> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, labels);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+    }
+
+
     private void drawFromQuery(long lap_count) {
 
-        lapchoose = lap_count;
-
+        lap_choose = lap_count;
         LatLng beforeDestination = null;
+
         //if line is exist remove it before render
         //  line.remove();
+
         //declare database to list
         LapLocationChangeDB db = new LapLocationChangeDB(getActivity());
-        List<LapChange> list = db.readDataLapChange(Resource.User, lapchoose, record_id);
+        List<LapChange> list = db.readDataLapChange(Resource.User, lap_choose, record_id);
 
         // loop for draw until finish
         for (LapChange lapChange : list) {
@@ -162,6 +159,11 @@ public class Fragment_DisplayData extends Fragment {
         }
     }
 
+    private void drawMap() {
+        myMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
+        myMap.setMyLocationEnabled(true);
+    }
+
     public void drawPolyLine(LatLng startDestination, LatLng endDestination) {
         Log.e("draw polyline start:", String.valueOf(startDestination));
         Log.e("draw polyline end:", String.valueOf(endDestination));
@@ -169,11 +171,5 @@ public class Fragment_DisplayData extends Fragment {
                 (new LatLng(startDestination.latitude, startDestination.longitude)
                         , new LatLng(endDestination.latitude, endDestination.longitude))
                 .width(5).color(Color.RED));
-    }
-
-    private void drawMap() {
-        myMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
-        // Enabling MyLocation Layer of Google Map
-        myMap.setMyLocationEnabled(true);
     }
 }
