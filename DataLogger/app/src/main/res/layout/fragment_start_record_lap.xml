@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.3"
-            android:background="#ff11ca00"
+            android:background="#76FF03"
             android:orientation="horizontal"
             android:weightSum="1">
 
@@ -78,7 +78,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffff7103"
+                android:background="#212121"
                 android:orientation="vertical">
 
 
@@ -133,7 +133,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ff429fff"
+                android:background="#424242"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -184,7 +184,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ff17ffa4"
+                android:background="#212121"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -234,7 +234,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffc162"
+                android:background="#424242"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -279,8 +279,9 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_horizontal"
-                android:background="@color/highlighted_text_material_light"
-                android:text="@string/startButtonLabel" />
+                android:background="#76FF03"
+                android:text="@string/startButtonLabel"
+                android:textSize="50dp" />
 
 
             <!-- end start button -->

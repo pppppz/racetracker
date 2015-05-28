@@ -9,7 +9,8 @@ import android.util.Log;
 public class RecordDB {
 
     public static final String USER_ID = "user_id";
-    public static final String RECORD_ID = "record_id";
+    public static final String RECORD_ID = "_id";
+    public static final String CREATE_TIME = "creation_time";
     private static final String TABLE_RECORD = "Record";
     private DatabaseHelper dbHelper;
     private SQLiteDatabase database;
@@ -36,7 +37,7 @@ public class RecordDB {
         //    Cursor mCursor = database.query(true, TABLE_RECORD, new String[]{USER_ID , ROUND_ID}, null, null, null, null, null, null);
         //  String query = "select * from " + TABLE_RECORD ;
         //     Cursor mCursor = database.rawQuery(query , null);
-        Cursor mCursor = database.rawQuery("select Record.record_id as _id, Record.* from Record", null);
+        Cursor mCursor = database.rawQuery("select Record.record_id as _id, Record.creation_time from Record", null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
@@ -51,6 +52,4 @@ public class RecordDB {
 
         return database.update(TABLE_RECORD, values, RECORD_ID + "=?", new String[]{String.valueOf(round_id)});
     }
-
-
 }

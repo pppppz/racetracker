@@ -12,7 +12,7 @@ public class HeadLapDatabase {
 
     private static final String DB_NAME = "HeadLap";
     public String USER_ID = "user_id";
-    public String LAP_TIME = "lap_time";
+    public String TIME = "time";
     public String ROUND_ID = "record_id";
     public String HEADLAP_KEYID = "headlap_KEYID";
     public String LAPCOUNT = "lap_count";
@@ -20,20 +20,27 @@ public class HeadLapDatabase {
     private SQLiteDatabase database;
 
 
+
     public HeadLapDatabase(Context context) {
         dbHelper = new DatabaseHelper(context);
         database = dbHelper.getWritableDatabase();
     }
-
-    public int updateRecord(String user_id, double lapTime, long round_id) {
-
+/*
+    public int updateRecord(long headlap_keyid , long time ) {
         ContentValues values = new ContentValues();
-        values.put(USER_ID, user_id);
-        values.put(ROUND_ID, round_id);
-        values.put(LAP_TIME, lapTime);
+        values.put(HEADLAP_KEYID , headlap_keyid);
+        String[] args = new String[]{String.valueOf(time)};
+        return database.update(DB_NAME, values, TIME + "=?" , args);
+    }*/
 
-        return database.update(DB_NAME, values, LAP_TIME + "=?", new String[]{String.valueOf(lapTime)});
+    public int updateRecord(long headlap_keyid, long time) {
+        ContentValues values = new ContentValues();
+        values.put(HEADLAP_KEYID, headlap_keyid);
+        values.put(TIME, time);
+        String[] args = new String[]{String.valueOf(headlap_keyid)};
+        return database.update(DB_NAME, values, HEADLAP_KEYID + "=?", args);
     }
+
 
     public long addNewLap(String uid, long rid, int count) {
         ContentValues values = new ContentValues();

@@ -1,6 +1,7 @@
 package com.app.raceanalyzer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.Criteria;
@@ -14,8 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.app.raceanalyzer.Database.HeadLapDatabase;
 import com.app.raceanalyzer.SensorListener.AccelerometerListener;
 import com.app.raceanalyzer.SensorListener.GPS_Listener;
 import com.app.raceanalyzer.SensorListener.LocationListener;
@@ -26,16 +29,17 @@ public class Fragment_StartRecordLap extends Fragment {
     public static TextView tvSatellite_InView, tvSatellite_InUse, tvSpeed;
     //accelorometer
     public static double axis_x, axis_y, axis_z, velocity;
+    public static long updatedTime = 0L;
     //location
     protected LocationManager locationManager;
     //time
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
-    long updatedTime = 0L;
     long bestLapTime = 0L;
     long startTime = 0L;
     LatLng StartLocation;
     private Location location;
+    private Button startButton;
     //   public static double latitude;
     //  public static double longitude;
     private Handler customHandler = new Handler();
@@ -46,10 +50,13 @@ public class Fragment_StartRecordLap extends Fragment {
     private View view;
     private TextView timerValue;
     private SensorManager sensorMgr;
+    private GPS_Listener gpsListener;
     //GPS
     private Criteria criteria;
     private String provider;
     private long record_id;
+    private AccelerometerListener accelerometerListener;
+    private HeadLapDatabase headLap;
 
 
     private Runnable updateTimerThread = new Runnable() {
@@ -65,6 +72,7 @@ public class Fragment_StartRecordLap extends Fragment {
                     + String.format("%02d", sec) + ":"
                     + String.format("%03d", milliseconds));
             customHandler.postDelayed(this, 0);
+
         }
     };
 
@@ -72,22 +80,52 @@ public class Fragment_StartRecordLap extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-/*
+
         startButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 if (startTime == 0L) {
                     startTime = SystemClock.uptimeMillis();
                     customHandler.postDelayed(updateTimerThread, 0);
+                    startButton.setBackgroundColor(Color.parseColor("#F44336"));
+                    startButton.setText("Stop");
                 } else {
-                    timeSwapBuff += timeInMilliseconds;
+                    /*timeSwapBuff += timeInMilliseconds;
+                    customHandler.removeCallbacks(updateTimerThread);*/
+                    //for remove thread count time
                     customHandler.removeCallbacks(updateTimerThread);
+
+                    //            String time = null;
+                    // switch Fragment to start record lap
+                    Bundle bundle = new Bundle(); //  bundle function is management resource , state
+                    bundle.putLong("timelap", updatedTime);
+                    bundle.putLong("record_id", record_id);
+                    Fragment fragment = new Fragment_SaveToCloud();
+                    fragment.setArguments(bundle);
+                    new switchFragment(fragment, getFragmentManager()).doSwitch();
+
                 }
             }
-        });*/
+        });
 
         setAboutLocation();
         setAboutAccelerometer();
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        super.onDestroyView();
+
+        //close accelerometer & GPS listener (for save battery)
+        sensorMgr.unregisterListener(accelerometerListener);
+        locationManager.removeGpsStatusListener(gpsListener);
+        locationManager.removeUpdates(locationListener);
+        long headlap_keyid = LocationListener.headLap_IDKey;
+
+        Log.e("Start record : ", headlap_keyid + " " + updatedTime);
+        headLap.updateRecord(headlap_keyid, updatedTime);
+        updatedTime = 0L;
     }
 
     @Override
@@ -100,19 +138,20 @@ public class Fragment_StartRecordLap extends Fragment {
                              Bundle savedInstanceState) {
 
         // declare xml to java
-        view = inflater.inflate(R.layout.fragment_record_lap, container, false);
+        view = inflater.inflate(R.layout.fragment_start_record_lap, container, false);
         timerValue = (TextView) view.findViewById(R.id.timerValue);
-        //startButton = (Button) view.findViewById(R.id.startButton);
+        startButton = (Button) view.findViewById(R.id.startButton);
         tvSpeed = (TextView) view.findViewById(R.id.tv_Speed);
         tvSatellite_InView = (TextView) view.findViewById(R.id.tv_satellite_in_view);
         tvSatellite_InUse = (TextView) view.findViewById(R.id.tv_satellite_in_use);
 
+        headLap = new HeadLapDatabase(getActivity());
         // get location & round id from fragment_chooseStartPoint
         savedInstanceState = getArguments();
         if (savedInstanceState != null) {
             // then you have arguments
             StartLocation = getArguments().getParcelable("location");
-            record_id = getArguments().getLong("record_d");
+            record_id = getArguments().getLong("record_id");
             Log.e("location start ", StartLocation.toString() + "Record id : " + record_id);
         } else {
             Log.e("location & round", " not set");
@@ -122,10 +161,11 @@ public class Fragment_StartRecordLap extends Fragment {
 
     public void setAboutAccelerometer() {
 
+
         sensorMgr = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         Sensor sensorAccelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        AccelerometerListener accelerometerListener = new AccelerometerListener();
-        sensorMgr.registerListener(accelerometerListener, sensorAccelerometer, SensorManager.SENSOR_DELAY_UI);
+        accelerometerListener = new AccelerometerListener();
+        sensorMgr.registerListener(accelerometerListener, sensorAccelerometer, SensorManager.SENSOR_STATUS_ACCURACY_LOW);
     }
 
     public void setAboutLocation() {
@@ -140,7 +180,7 @@ public class Fragment_StartRecordLap extends Fragment {
         provider = locationManager.getBestProvider(criteria, false);
         location = locationManager.getLastKnownLocation(provider);  // the last known location of this provider
         locationListener = new LocationListener(StartLocation, record_id, getActivity());
-        GPS_Listener gpsListener = new GPS_Listener(locationManager);
+        gpsListener = new GPS_Listener(locationManager);
         locationManager.addGpsStatusListener(gpsListener);
 
 

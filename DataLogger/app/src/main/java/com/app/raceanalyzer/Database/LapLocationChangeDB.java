@@ -25,8 +25,6 @@ public class LapLocationChangeDB {
     private static String VELOCITY = "velocity";
     private DatabaseHelper dbHelper;
 
-
-
     public LapLocationChangeDB(Context context) {
         dbHelper = new DatabaseHelper(context);
         database = dbHelper.getWritableDatabase();
@@ -46,69 +44,6 @@ public class LapLocationChangeDB {
         values.put(TIME, time);
         values.put(LAPCOUNT, count);
         return database.insert(DB_NAME_LapLocationChange, null, values);
-    }
-
-    public Cursor readAllLap() {
-        Cursor cursor = database.query(true, DB_NAME_LapLocationChange, new String[]{AXIS_X, AXIS_Y, AXIS_Y, VELOCITY, RECORD_ID, Lat, Lng, HEADLAP_KEYID, TIME}, null, null, null, null, null, null);
-
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
-        return cursor;
-
-    }
-
-    //get all lap change
-    public List<LapChange> getAllLapChange() {
-        List<LapChange> lapChange = new ArrayList<>();
-
-        //  Cursor cursor = database.query(DB_NAME_LapLocationChange,
-        //allColumns, null, null, null, null, null);
-        String query = "select * from " + DB_NAME_LapLocationChange;
-        Cursor cursor = database.rawQuery(query, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            LapChange LapChange = cursorToLap(cursor);
-            lapChange.add(LapChange);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
-        cursor.close();
-        return lapChange;
-    }
-
-
-    public List<String> readLapLocationChangeByHeadLapID(String userName, long lap_id) {
-        List<String> list = new ArrayList<>();
-        Cursor mCursor = database.rawQuery("select LapLocationChange.lapLocationChangeID as _id ,LapLocationChange.lap_id FROM LapLocationChange where user_id='" + userName + "' AND lap_id='" + lap_id + "';", null);
-        // looping through all rows and adding to list
-        if (mCursor.moveToFirst()) {
-            do {
-                list.add(mCursor.getString(1));//adding 2nd column data
-            } while (mCursor.moveToNext());
-        }
-        // closing connection
-        mCursor.close();
-        database.close();
-        // returning lables
-        return list;
-    }
-
-    public List<String> readAllLapLocation(String userName, long lap_id) {
-        List<String> list = new ArrayList<>();
-        Cursor mCursor = database.rawQuery("select LapLocationChange.lapLocationChangeID as _id ,LapLocationChange.* FROM LapLocationChange where user_id='" + userName + "' AND lap_id='" + lap_id + "';", null);
-        // looping through all rows and adding to list
-        if (mCursor.moveToFirst()) {
-            do {
-                list.add(mCursor.getString(1));//adding 2nd column data
-                list.add(mCursor.getString(2));
-            } while (mCursor.moveToNext());
-        }
-        // closing connection
-        mCursor.close();
-        database.close();
-        // returning lables
-        return list;
     }
 
     public List readDataLapChange(String userName, long lap_count, long record_id) {

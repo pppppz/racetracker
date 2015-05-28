@@ -46,6 +46,7 @@ public class Fragment_CreateRecord extends Fragment {
             // switch Fragment to start record
             Bundle bundle = new Bundle(); //  bundle function is management resource , state
             bundle.putParcelable("location", location);
+            Log.e("createrecord", String.valueOf(record_id));
             bundle.putLong("record_id", record_id);
             Fragment fragment = new Fragment_StartRecordLap();
             fragment.setArguments(bundle);

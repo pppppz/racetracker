@@ -46,9 +46,9 @@ public class Fragment_ListRecord extends Fragment {
         RecordDB record = new RecordDB(getActivity());
         Cursor recordList = record.readAllRecord();
         // Log.e(Fragment_ListRecord.class.getName(), RecordDB.USER_ID + "+" + RecordDB.ROUND_ID);
-        String[] from = new String[]{RecordDB.USER_ID, RecordDB.RECORD_ID};
-        int[] target = new int[]{R.id.txtName, R.id.txtSurname};
-        dbAdapter = new SimpleCursorAdapter(getActivity(), R.layout.show_list_layout, recordList, from, target, CursorAdapter.FLAG_AUTO_REQUERY);
+        String[] from = new String[]{RecordDB.RECORD_ID, RecordDB.CREATE_TIME};
+        int[] target = new int[]{R.id.txtRecord, R.id.txtDate};
+        dbAdapter = new SimpleCursorAdapter(getActivity(), R.layout.show_list_layout, recordList, from, target, 0);
         listView.setAdapter(dbAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,7 +87,7 @@ public class Fragment_ListRecord extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_choose_list_round, container, false);
+        view = inflater.inflate(R.layout.fragment_choose_list_record, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
         return view;
     }
