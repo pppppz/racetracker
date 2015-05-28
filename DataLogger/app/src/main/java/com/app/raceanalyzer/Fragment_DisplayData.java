@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,25 +23,31 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.parse.ParseUser;
 
 import java.util.List;
 
 public class Fragment_DisplayData extends Fragment {
 
-
-    ImageButton.OnClickListener btnGraphListener = new ImageButton.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            new switchFragment(new Fragment_DisplayGraph(), fragmentManager).doSwitch();
-        }
-    };
+    public static long lapchoose;
     private ImageButton btnGraph;
     private Spinner spinner;
     private View view;
     private long record_id;
-    private String userName = ParseUser.getCurrentUser().getUsername();
+    ImageButton.OnClickListener btnGraphListener = new ImageButton.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+
+            // switch Fragment to start record lap
+            Bundle bundle = new Bundle(); //  bundle function is management resource , state
+            bundle.putLong("lapchoose", lapchoose);
+            bundle.putLong("record_id", record_id);
+            Fragment fragment = new Fragment_DisplayGraph();
+            fragment.setArguments(bundle);
+            new switchFragment(fragment, getFragmentManager()).doSwitch();
+
+        }
+    };
     private GoogleMap myMap;
 
     //    LatLng start = new LatLng(13.748223, 100.533957); //BTS Siam
@@ -52,9 +57,8 @@ public class Fragment_DisplayData extends Fragment {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String getSelectText = parent.getSelectedItem().toString();
-            long select = Long.parseLong(getSelectText);
-            drawFromQuery(select);
-
+            lapchoose = Long.parseLong(getSelectText);
+            drawFromQuery(lapchoose);
         }
 
         @Override
@@ -65,6 +69,7 @@ public class Fragment_DisplayData extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -75,7 +80,7 @@ public class Fragment_DisplayData extends Fragment {
     private void setSpinnerHeadLap() {
 
         HeadLapDatabase db = new HeadLapDatabase(getActivity());
-        List<Long> labels = db.readAllHeadLap(userName, record_id);
+        List<Long> labels = db.readAllHeadLap(Resource.User, record_id);
 
         // Creating adapter for spinner
         ArrayAdapter<Long> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, labels);
@@ -86,7 +91,6 @@ public class Fragment_DisplayData extends Fragment {
         // attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
     }
-
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -117,7 +121,7 @@ public class Fragment_DisplayData extends Fragment {
         if (savedInstanceState != null) {
             // then you have arguments
             record_id = getArguments().getLong("record_id");
-
+            lapchoose = getArguments().getLong("lapchoose");
         } else {
             Log.e("location & round", " not set");
         }
@@ -129,12 +133,14 @@ public class Fragment_DisplayData extends Fragment {
 
     private void drawFromQuery(long lap_count) {
 
+        lapchoose = lap_count;
+
         LatLng beforeDestination = null;
         //if line is exist remove it before render
         //  line.remove();
         //declare database to list
         LapLocationChangeDB db = new LapLocationChangeDB(getActivity());
-        List<LapChange> list = db.readDataLapChange(userName, lap_count, record_id);
+        List<LapChange> list = db.readDataLapChange(Resource.User, lapchoose, record_id);
 
         // loop for draw until finish
         for (LapChange lapChange : list) {

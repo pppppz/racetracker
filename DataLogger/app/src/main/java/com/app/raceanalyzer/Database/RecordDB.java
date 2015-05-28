@@ -12,6 +12,7 @@ public class RecordDB {
     public static final String RECORD_ID = "_id";
     public static final String CREATE_TIME = "creation_time";
     private static final String TABLE_RECORD = "Record";
+    private final String BESTLAPTIME = "BESTLAPTIME";
     private DatabaseHelper dbHelper;
     private SQLiteDatabase database;
 
@@ -44,12 +45,12 @@ public class RecordDB {
         return mCursor;
     }
 
-    public int updateRecord(String user_id, long round_id) {
+    public int updateRecord(String user_id, long round_id, long bestlaptime) {
 
         ContentValues values = new ContentValues();
         values.put(USER_ID, user_id);
         values.put(RECORD_ID, round_id);
-
+        values.put(BESTLAPTIME, bestlaptime);
         return database.update(TABLE_RECORD, values, RECORD_ID + "=?", new String[]{String.valueOf(round_id)});
     }
 }

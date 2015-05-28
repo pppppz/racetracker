@@ -10,7 +10,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "RaceAnalyzer";
     private static final int DATABASE_VERSION = 16;
 
-    private static String DATABASE_RECORD = "create table Record (`record_id` INTEGER PRIMARY KEY AUTOINCREMENT , `user_id` VARCHAR(20) not null , `creation_time` DATETIME DEFAULT CURRENT_TIMESTAMP)";
+    private static String DATABASE_RECORD = "create table Record (`record_id` INTEGER PRIMARY KEY AUTOINCREMENT , `user_id` VARCHAR(20) not null , `creation_time` DATETIME DEFAULT CURRENT_TIMESTAMP , `BESTLAPTIME` INTEGER)";
     private static String DATABASE_LAP_LOCATION_CHANGE = "create table LapLocationChange (`lapLocationChangeID` INTEGER PRIMARY KEY AUTOINCREMENT, `axis_x` INTEGER  not null, `axis_y` INTEGER  not null, `axis_z` INTEGER  not null , `velocity` INTEGER not null, `latitude` double not null , `longitude` double  not null, `record_id` INTEGER not null , `time` INTEGER , `user_id` VARCHAR(20) not null , `lap_count` INTEGER)";
     private static String DATABASE_LAP_HEADER = "create table HeadLap(`headlap_KEYID` INTEGER PRIMARY KEY AUTOINCREMENT ,  `record_id` INTEGER, `user_id` VARCHAR(20) , `lap_count` INTEGER , `time` INTEGER)";
 
